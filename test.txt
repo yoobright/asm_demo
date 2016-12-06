@@ -1,6 +1,6 @@
 _DATA
-field1 data1
-field2 data2
+name1 word, 111
+name2 word, 222
 _CODE
 opcode1 num1 mum2
 
