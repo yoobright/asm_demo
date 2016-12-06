@@ -1,7 +1,10 @@
 _DATA
 name1 word, 111
 name2 word, 222
+name2 word, 222
 _CODE
 opcode1 num1 mum2
 
 opcode2 num3 num4
+loop1: opcode2 num3 num4
+opcode3 num3,  num4, data, $(ppp)
