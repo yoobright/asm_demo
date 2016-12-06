@@ -51,7 +51,7 @@ class DataLine:
         self.addr_offset = addr_offset
 
     def __repr__(self):
-        return 'name: {}, type: {}, size: {}, offset: {}'.format(
+        return 'name: {0}, type: {1}, size: {2}, offset: {3}'.format(
             self.data_name, self.data_type, self.data_size, self.addr_offset)
 
 
@@ -63,7 +63,7 @@ class CodeLine:
         self.code_list = [0] * 32
 
     def __repr__(self):
-        return 'op_code: {}, op_num: {} pc: {}'.format(
+        return 'op_code: {0}, op_num: {1} pc: {2}'.format(
             self.op_code, self.op_num, self.pc)
 
 
