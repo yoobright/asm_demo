@@ -28,6 +28,11 @@ def get_data_elem(line):
     if not data_size.isdigit():
         raise AsmException("data size check error")
 
+    if data_type == 'word':
+        data_size = int(data_size) * 4
+    else:
+        data_size = int(data_size)
+
     return data_name, data_type, data_size
 
 
@@ -49,7 +54,7 @@ class DataLine:
         self.addr_offset = addr_offset
 
     def __repr__(self):
-        return 'name: {0}, type: {1}, size: {2}, offset: {3}'.format(
+        return 'name: {0}, type: {1}, size: {2}, addr_offset: {3}'.format(
             self.data_name, self.data_type, self.data_size, self.addr_offset)
 
 
@@ -84,7 +89,7 @@ with open("test.txt") as f:
 
             if state == 'data' and line_data:
                 data_line_list.append(DataLine(line_data, addr_offset))
-                addr_offset += int(data_line_list[-1].data_size)
+                addr_offset += data_line_list[-1].data_size
 
             if state == 'code' and line_data:
                 if ':' in line_data:
