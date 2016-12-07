@@ -9,7 +9,8 @@ state = None
 
 data_line_list = []
 code_line_list = []
-tag_dict = {}
+tag_pc_dict = {}
+data_offset_dict = {}
 
 # data_list = []
 
@@ -88,13 +89,15 @@ with open("test.txt") as f:
                 continue
 
             if state == 'data' and line_data:
-                data_line_list.append(DataLine(line_data, addr_offset))
-                addr_offset += data_line_list[-1].data_size
+                data_line = DataLine(line_data, addr_offset)
+                data_line_list.append(data_line)
+                addr_offset += data_line.data_size
+                data_offset_dict[data_line.data_name] = data_line.addr_offset
 
             if state == 'code' and line_data:
                 if ':' in line_data:
                     tag, line_data, = line_data.split(':')
-                    tag_dict[tag] = pc_count
+                    tag_pc_dict[tag] = pc_count
                 code_line_list.append(CodeLine(line_data, pc_count))
                 pc_count += 1
             line_count += 1
@@ -104,9 +107,15 @@ with open("test.txt") as f:
 
 
 pp = pprint.PrettyPrinter(indent=4)
+print("=====data_line_list=====")
 pp.pprint(data_line_list)
+print("=====code_line_list=====")
 pp.pprint(code_line_list)
-pp.pprint(tag_dict)
+print("=====data_offset_dict=====")
+pp.pprint(data_offset_dict)
+print("=====tag_pc_dict=====")
+pp.pprint(tag_pc_dict)
+
 
 for code_line in code_line_list:
     print(code_line.get_encode())

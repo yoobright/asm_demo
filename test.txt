@@ -1,9 +1,9 @@
 _DATA
 name1 word, 111
 name2 word, 222
-name2 word, 222
+name3 word, 222
 _CODE
-s_add  SR1, SR0, 0
+loop1: s_add  SR1, SR0, 0
 s_add  SR2, SR0, 0
 s_add  SR4, SR0, 0
 v_add_f  VR3, VR0, VR0
