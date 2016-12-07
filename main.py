@@ -60,11 +60,14 @@ class CodeLine:
         self.line = line
         self.pc = pc
         self.op_code, self.op_num = get_code_elem(line)
-        self.code_list = [0] * 32
+        self.encode_list = ['0'] * 32
 
     def __repr__(self):
         return 'op_code: {0}, op_num: {1} pc: {2}'.format(
             self.op_code, self.op_num, self.pc)
+
+    def get_encode(self):
+        return ''.join(self.encode_list)
 
 
 with open("test.txt") as f:
@@ -92,3 +95,6 @@ pp = pprint.PrettyPrinter(indent=4)
 pp.pprint(data_line_list)
 pp.pprint(code_line_list)
 pp.pprint(tag_dict)
+
+for code_line in code_line_list:
+    print(code_line.get_encode())
