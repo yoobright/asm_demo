@@ -7,3 +7,5 @@ pattern = re.compile(r'\$\((\w+)\)')
 
 print(list('101'))
 print(''.join(['1', '2', '3']))
+
+print('{:b}'.format(-2 & 0xff))

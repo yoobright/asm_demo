@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
+from exception_util import *
+from encode_dict import opcode_encode_dict
 import re
 import pprint
 
@@ -12,6 +14,7 @@ tag_dict = {}
 # data_list = []
 
 pc_count = 0
+line_count = 1
 addr_offset = 0
 type_list = ['word']
 
@@ -30,17 +33,12 @@ def get_data_elem(line):
 
 def get_code_elem(line):
     pattern = re.compile(r'\s+|,\s*')
-    splited_line = pattern.split(line.strip())
-    op_code = splited_line[0]
-    op_num = splited_line[1:]
-
-    return op_code, op_num
-
-
-class AsmException(Exception):
-    def __init__(self, message):
-        self.message = message
-        super(AsmException, self).__init__(message)
+    split_line = pattern.split(line.strip())
+    opcode = split_line[0]
+    operand = split_line[1:]
+    if opcode not in opcode_encode_dict:
+        raise AsmException('opcode check error')
+    return opcode, operand
 
 
 class DataLine:
@@ -59,37 +57,46 @@ class CodeLine:
     def __init__(self, line, pc):
         self.line = line
         self.pc = pc
-        self.op_code, self.op_num = get_code_elem(line)
-        self.encode_list = ['0'] * 32
+        self.opcode, self.operand = get_code_elem(line)
+        self.encode_list = None
 
     def __repr__(self):
-        return 'op_code: {0}, op_num: {1} pc: {2}'.format(
-            self.op_code, self.op_num, self.pc)
+        return 'opcode: {0}, operand: {1} pc: {2}'.format(
+            self.opcode, self.operand, self.pc)
 
     def get_encode(self):
-        return ''.join(self.encode_list)
+        if self.encode_list:
+            return ''.join(self.encode_list)
 
 
 with open("test.txt") as f:
     for file_line in f.readlines():
-        line_data = file_line.strip().split('#')[0].strip().lower()
-        if line_data.startswith('_data'):
-            state = 'data'
-            continue
-        if line_data.startswith('_code'):
-            state = 'code'
-            continue
+        try:
+            line_data = file_line.strip().split('#')[0].strip().lower()
+            if line_data.startswith('_data'):
+                state = 'data'
+                line_count += 1
+                continue
+            if line_data.startswith('_code'):
+                state = 'code'
+                line_count += 1
+                continue
 
-        if state == 'data' and line_data:
-            data_line_list.append(DataLine(line_data, addr_offset))
-            addr_offset += int(data_line_list[-1].data_size)
+            if state == 'data' and line_data:
+                data_line_list.append(DataLine(line_data, addr_offset))
+                addr_offset += int(data_line_list[-1].data_size)
 
-        if state == 'code' and line_data:
-            if ':' in line_data:
-                tag, line_data, = line_data.split(':')
-                tag_dict[tag] = pc_count
-            code_line_list.append(CodeLine(line_data, pc_count))
-            pc_count += 1
+            if state == 'code' and line_data:
+                if ':' in line_data:
+                    tag, line_data, = line_data.split(':')
+                    tag_dict[tag] = pc_count
+                code_line_list.append(CodeLine(line_data, pc_count))
+                pc_count += 1
+            line_count += 1
+        except AsmException as ex:
+            print("Asm exeption in line: {0}".format(line_count))
+            raise ex
+
 
 pp = pprint.PrettyPrinter(indent=4)
 pp.pprint(data_line_list)

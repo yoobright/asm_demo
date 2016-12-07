@@ -3,8 +3,9 @@ name1 word, 111
 name2 word, 222
 name2 word, 222
 _CODE
-opcode1 num1 mum2
-
-opcode2 num3 num4
-loop1: opcode2 num3 num4
-opcode3 num3,  num4, data, $(ppp)
+s_add  SR1, SR0, 0
+s_add  SR2, SR0, 0
+s_add  SR4, SR0, 0
+v_add_f  VR3, VR0, VR0
+s_mulw SR6, SR1, 75
+s_add  SR3, SR0, SR6
