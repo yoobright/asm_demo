@@ -19,14 +19,27 @@ def check_int(check_input):
     return False
 
 
+def hex2bin(input_num):
+    if isinstance(input_num, basestring):
+        int_num = int(input_num, 16)
+    else:
+        int_num = int(input_num)
+    ret = int2bin(int_num)
+    return ret
+
+
+def int2bin(input_num):
+    ret = '{:0>64b}'.format(
+            (int(input_num) + 0x10000000000000000) & 0xffffffffffffffff)
+    return ret
+
+
 def imm_encode(imm):
     ret = None
     if check_hex(imm):
-        ret = '{:0>64b}'.format(
-            (int(imm[2:], 16) + 0x10000000000000000) & 0xffffffffffffffff)
+        ret = hex2bin(imm)
     elif check_int(imm):
-        ret = '{:0>64b}'.format(
-            (int(imm) + 0x10000000000000000) & 0xffffffffffffffff)
+        ret = int2bin(imm)
     else:
         raise AsmException('immediate check error')
     return ret
