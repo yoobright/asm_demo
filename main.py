@@ -22,7 +22,11 @@ type_list = ['word']
 
 def get_data_elem(line):
     pattern = re.compile(r'\s+|,\s*')
-    data_name, data_type, data_size = pattern.split(line.strip())
+    split_line = pattern.split(line.strip())
+    if len(split_line) != 3:
+        print("data segment read error")
+        raise AsmException("data segment read error")
+    data_name, data_type, data_size = split_line
 
     if data_type not in type_list:
         print("'{0}' is not a valid data type".format(data_type))
@@ -43,7 +47,10 @@ def get_code_elem(line):
     pattern = re.compile(r'\s+|,\s*')
     split_line = pattern.split(line.strip())
     opcode = split_line[0]
-    operand = split_line[1:]
+    if len(split_line) > 1:
+        operand = split_line[1:]
+    else:
+        operand = None
     if opcode not in opcode_encode_dict:
         print("'{0}' is not a valid opcode".format(opcode))
         raise AsmException('opcode check error')
