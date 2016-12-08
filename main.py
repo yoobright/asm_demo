@@ -25,8 +25,10 @@ def get_data_elem(line):
     data_name, data_type, data_size = pattern.split(line.strip())
 
     if data_type not in type_list:
+        print("'{0}' is not a valid data type".format(data_type))
         raise AsmException("data type check error")
     if not data_size.isdigit():
+        print("'{0}' is not a valid data size".format(data_size))
         raise AsmException("data size check error")
 
     if data_type == 'word':
@@ -43,6 +45,7 @@ def get_code_elem(line):
     opcode = split_line[0]
     operand = split_line[1:]
     if opcode not in opcode_encode_dict:
+        print("'{0}' is not a valid opcode".format(opcode))
         raise AsmException('opcode check error')
     return opcode, operand
 
@@ -102,7 +105,7 @@ with open("test.txt") as f:
                 pc_count += 1
             line_count += 1
         except AsmException as ex:
-            print("Asm exeption in line: {0}".format(line_count))
+            print("Asm exception in line: {0}".format(line_count))
             raise ex
 
 

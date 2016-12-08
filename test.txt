@@ -1,5 +1,5 @@
 _DATA
-name1 word, 111
+name1 word, 111a
 name2 word, 222
 name3 word, 222
 _CODE
@@ -7,5 +7,5 @@ loop1: s_add  SR1, SR0, 0
 s_add  SR2, SR0, 0
 s_add  SR4, SR0, 0
 v_add_f  VR3, VR0, VR0
-s_mulw SR6, SR1, 75
+s_mul SR6, SR1, 75
 s_add  SR3, SR0, SR6
