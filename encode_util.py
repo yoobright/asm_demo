@@ -27,8 +27,16 @@ def check_mem_data_name(check_input):
     return False
 
 
+def check_aux_reg_name(check_input):
+    aux_reg_pattern = re.compile(r'\[\w+\]$')
+    match = aux_reg_pattern.match(str(check_input))
+    if match:
+        return True
+    return False
+
+
 def hex2bin(input_num, truncate=None):
-    if isinstance(input_num, basestring):
+    if isinstance(input_num, str):
         int_num = int(input_num, 16)
     else:
         int_num = int(input_num)
@@ -72,3 +80,4 @@ def aux_reg_encode(input_str, reg_dict):
         ret = hex2bin(reg_dict[aux_reg_name], truncate=8)
     else:
         raise AsmException('auxiliary register encode error')
+    return ret

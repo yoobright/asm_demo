@@ -5,8 +5,6 @@ from encode_dict import opcode_encode_dict
 import re
 import pprint
 
-state = None
-
 data_line_list = []
 code_line_list = []
 tag_pc_dict = {}
@@ -14,8 +12,6 @@ data_offset_dict = {}
 
 # data_list = []
 
-pc_count = 0
-line_count = 1
 addr_offset = 0
 type_list = ['word']
 
@@ -58,8 +54,9 @@ def get_code_elem(line):
 
 
 class DataLine:
-    def __init__(self, line, addr_offset=addr_offset):
+    def __init__(self, line, line_num, addr_offset):
         self.line = line
+        self.line_num = line_num
         self.data_name, self.data_type, self.data_size = get_data_elem(
             self.line)
         self.addr_offset = addr_offset
@@ -70,8 +67,9 @@ class DataLine:
 
 
 class CodeLine:
-    def __init__(self, line, pc):
+    def __init__(self, line, line_num, pc):
         self.line = line
+        self.line_num = line_num
         self.pc = pc
         self.opcode, self.operand = get_code_elem(line)
         self.encode_list = None
@@ -85,47 +83,59 @@ class CodeLine:
             return ''.join(self.encode_list)
 
 
-with open("test.txt") as f:
-    for file_line in f.readlines():
-        try:
-            line_data = file_line.strip().split('#')[0].strip().lower()
-            if line_data.startswith('_data'):
-                state = 'data'
+def load_by_line(file_name, offset=0):
+    with open(file_name) as f:
+        state = None
+        line_count = 1
+        pc_count = 0
+        for file_line in f.readlines():
+            try:
+                line_data = file_line.strip().split('#')[0].strip().lower()
+                if line_data.startswith('_data'):
+                    state = 'data'
+                    line_count += 1
+                    continue
+                if line_data.startswith('_code'):
+                    state = 'code'
+                    line_count += 1
+                    continue
+
+                if state == 'data' and line_data:
+                    data_line = DataLine(line_data, line_count, offset)
+                    data_line_list.append(data_line)
+                    offset += data_line.data_size
+                    data_offset_dict[data_line.data_name] = \
+                        data_line.addr_offset
+
+                if state == 'code' and line_data:
+                    if ':' in line_data:
+                        tag, line_data, = line_data.split(':')
+                        tag_pc_dict[tag] = pc_count
+                    code_line_list.append(
+                        CodeLine(line_data, line_count, pc_count))
+                    pc_count += 1
                 line_count += 1
-                continue
-            if line_data.startswith('_code'):
-                state = 'code'
-                line_count += 1
-                continue
-
-            if state == 'data' and line_data:
-                data_line = DataLine(line_data, addr_offset)
-                data_line_list.append(data_line)
-                addr_offset += data_line.data_size
-                data_offset_dict[data_line.data_name] = data_line.addr_offset
-
-            if state == 'code' and line_data:
-                if ':' in line_data:
-                    tag, line_data, = line_data.split(':')
-                    tag_pc_dict[tag] = pc_count
-                code_line_list.append(CodeLine(line_data, pc_count))
-                pc_count += 1
-            line_count += 1
-        except AsmException as ex:
-            print("Asm exception in line: {0}".format(line_count))
-            raise ex
+            except AsmException as ex:
+                print("Asm exception in line: {0}".format(line_count))
+                raise ex
+    return True
 
 
-pp = pprint.PrettyPrinter(indent=4)
-print("=====data_line_list=====")
-pp.pprint(data_line_list)
-print("=====code_line_list=====")
-pp.pprint(code_line_list)
-print("=====data_offset_dict=====")
-pp.pprint(data_offset_dict)
-print("=====tag_pc_dict=====")
-pp.pprint(tag_pc_dict)
+if __name__ == '__main__':
 
+    input_file = "test.txt"
 
-for code_line in code_line_list:
-    print(code_line.get_encode())
+    load_by_line(input_file, addr_offset)
+
+    pp = pprint.PrettyPrinter(indent=4)
+    print("=====data_line_list=====")
+    pp.pprint(data_line_list)
+    print("=====code_line_list=====")
+    pp.pprint(code_line_list)
+    print("=====data_offset_dict=====")
+    pp.pprint(data_offset_dict)
+    print("=====tag_pc_dict=====")
+    pp.pprint(tag_pc_dict)
+
+    for code_line in code_line_list:
+        print(code_line.get_encode())
