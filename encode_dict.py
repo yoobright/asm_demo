@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+# ==============================================================================
 reg_encode_dict = {}
 
 # add sr
@@ -35,6 +36,43 @@ opcode_encode_dict = {
     's_movi': [''],
 }
 
+# ==============================================================================
+aux_reg_encode_dict = {
+    'aux_identity': 0x0,
+    'aux_fetchpc': 0x4,
+    'aux_pause': 0x5,
+    'aux_run': 0x6,
+    'aux_stop': 0x7,
+    'aux_psw': 0x8,
+    'aux_vlen0': 0x20,
+    'aux_updw': 0x23,
+    'aux_vlen1': 0x21,
+    'aux_vlen2': 0x22,
+    'aux_sldstrd1': 0x24,
+    'aux_sldstrd2': 0x25,
+    'aux_actln': 0x28,
+    'aux_actpe': 0x29,
+    'aux_lsvlen': 0x30,
+    'aux_lsvln': 0x31,
+    'aux_lsvhv': 0x32,
+    'aux_lsvridx': 0x33,
+    'aux_lsvcidx': 0x34,
+    'aux_lsvstrd': 0x35,
+    'aux_lsvrow': 0x37,
+    'aux_lsvrowstrd': 0x38,
+    'aux_lsvpad': 0x26,
+    'aux_ilvlnsrc': 0x40,
+    'aux_ilvpesrc': 0x41,
+    'aux_ilvlndst': 0x42,
+    'aux_ilvpedst': 0x43,
+    'aux_ilvlen': 0x44,
+    'aux_ilvpad': 0x45,
+    'aux_fprnd': 0x50,
+    'aux_intrnd': 0x54,
+    'aux_intsat': 0x55,
+    'aux_intfxdp': 0x56
+}
+# ==============================================================================
 for i in ['', 'i']:
     opcode_encode_dict['s_add' + i] = ['']
     opcode_encode_dict['s_sub' + i] = ['']
@@ -91,4 +129,7 @@ for i in ['_f', '_hb', '_b', '_h', '_w']:
 
 if __name__ == '__main__':
     print(reg_encode_dict)
+    print('=' * 20)
+    print(aux_reg_encode_dict)
+    print('=' * 20)
     print(opcode_encode_dict)
