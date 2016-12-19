@@ -1,27 +1,34 @@
 # -*- coding: utf-8 -*-
 from exception_util import AsmException
+from encode_util import int2bin
 
 
-def get_imm_opcode(input_str):
+def set_imm_opcode(input_str):
     if input_str == 'i':
         return '1'
     return '0'
 
 
-def get_bit_width_opcode(input_str):
-    if input_str == 'f':
+def set_bit_width_opcode(input_str):
+    if input_str == '_f':
         return '000'
-    elif input_str == 'hb':
+    elif input_str == '_hb':
         return '001'
-    elif input_str == 'b':
+    elif input_str == '_b':
         return '010'
-    elif input_str == 'h':
+    elif input_str == '_h':
         return '011'
-    elif input_str == 'w':
+    elif input_str == '_w':
         return '100'
     else:
         raise AsmException('not a valid bit width')
 
+
+def set_meta(function, imm, group):
+    return {
+        'function': function,
+        'imm': imm,
+        'group': group}
 
 # reg
 # ==============================================================================
@@ -87,30 +94,62 @@ aux_reg_encode_dict = {
 # ==============================================================================
 
 # group 000
+group = '000'
 opcode_encode_dict = {
-    's_jal': {'function': '00000000', 'imm': '0', 'group': '000'},
-    's_jalr': {'function': '00000000', 'imm': '0', 'group': '000'},
-    's_beq': {'function': '00000000', 'imm': '0', 'group': '000'},
-    's_bne': {'function': '00000000', 'imm': '0', 'group': '000'},
-    's_bge': {'function': '00000000', 'imm': '0', 'group': '000'},
-    's_bltu': {'function': '00000000', 'imm': '0', 'group': '000'},
-    's_bgeu': {'function': '00000000', 'imm': '0', 'group': '000'},
-    's_wauxi': {'function': '00000000', 'imm': '0', 'group': '000'},
-    's_rauxi': {'function': '00000000', 'imm': '0', 'group': '000'},
-    's_sync': {'function': '00000000', 'imm': '0', 'group': '000'},
-    's_movi': {'function': '00000000', 'imm': '0', 'group': '000'},
+    's_jal': set_meta(int2bin(0, 8), '0', group),
+    's_jalr': set_meta(int2bin(1, 8), '0', group),
+    's_beq': set_meta(int2bin(2, 8), '0', group),
+    's_bne': set_meta(int2bin(3, 8), '0', group),
+    's_blt': set_meta(int2bin(4, 8), '0', group),
+    's_bltu': set_meta(int2bin(5, 8), '0', group),
+    's_bge': set_meta(int2bin(6, 8), '0', group),
+    's_bgeu': set_meta(int2bin(7, 8), '0', group),
+    's_sync': set_meta(int2bin(8, 8), '0', group),
+    's_ld_b': set_meta(int2bin(9, 8), '0', group),
+    's_ld_h': set_meta(int2bin(10, 8), '0', group),
+    's_ld_w': set_meta(int2bin(11, 8), '0', group),
+    's_st_b': set_meta(int2bin(12, 8), '0', group),
+    's_st_h': set_meta(int2bin(13, 8), '0', group),
+    's_st_w': set_meta(int2bin(14, 8), '0', group),
+    's_movi': set_meta(int2bin(15, 8), '0', group),
 }
 
 for i in ['', 'i']:
-    opcode_encode_dict['s_add' + i] = ['']
-    opcode_encode_dict['s_sub' + i] = ['']
-    opcode_encode_dict['s_and' + i] = ['']
-    opcode_encode_dict['s_or' + i] = ['']
-    opcode_encode_dict['s_xor' + i] = ['']
-    opcode_encode_dict['s_sll' + i] = ['']
-    opcode_encode_dict['s_srl' + i] = ['']
-    opcode_encode_dict['s_sra' + i] = ['']
-    opcode_encode_dict['s_mulw' + i] = ['']
+    opcode_encode_dict['s_add' + i] = \
+        set_meta(int2bin(16, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_sub' + i] = \
+        set_meta(int2bin(17, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_and' + i] = \
+        set_meta(int2bin(18, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_or' + i] = \
+        set_meta(int2bin(19, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_xor' + i] = \
+        set_meta(int2bin(20, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_sll' + i] = \
+        set_meta(int2bin(21, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_srl' + i] = \
+        set_meta(int2bin(22, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_sra' + i] = \
+        set_meta(int2bin(23, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_mulw' + i] = \
+        set_meta(int2bin(24, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_cmpeq' + i] = \
+        set_meta(int2bin(25, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_cmpne' + i] = \
+        set_meta(int2bin(26, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_cmplt' + i] = \
+        set_meta(int2bin(27, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_cmpltu' + i] = \
+        set_meta(int2bin(28, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_cmpgt' + i] = \
+        set_meta(int2bin(29, 8), set_imm_opcode(i), group)
+    opcode_encode_dict['s_cmpgtu' + i] = \
+        set_meta(int2bin(30, 8), set_imm_opcode(i), group)
+
+opcode_encode_dict['nop'] = set_meta(int2bin(31, 8), '0', '000'),
+
+# group 001
+
 
 for i in ['_b', '_h', '_w']:
     opcode_encode_dict['v_ld' + i] = ['']
@@ -131,7 +170,7 @@ for i in ['', 'i']:
         opcode_encode_dict['v_not' + i + j] = ['']
 
 for i in ['', 'i']:
-    for j in ['_hb', 'b', 'h', 'w']:
+    for j in ['_hb', '_b', '_h', '_w']:
         opcode_encode_dict['v_shl' + i + j] = ['']
         opcode_encode_dict['v_shr' + i + j] = ['']
         opcode_encode_dict['v_shar' + i + j] = ['']
@@ -156,8 +195,10 @@ for i in ['_f', '_hb', '_b', '_h', '_w']:
 
 
 if __name__ == '__main__':
-    print(reg_encode_dict)
+    import pprint
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(reg_encode_dict)
     print('=' * 20)
-    print(aux_reg_encode_dict)
+    pp.pprint(aux_reg_encode_dict)
     print('=' * 20)
-    print(opcode_encode_dict)
+    pp.pprint(opcode_encode_dict)
