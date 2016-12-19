@@ -55,9 +55,9 @@ def int2bin(input_num, truncate=None):
 def imm_encode(imm, base):
     ret = None
     if base == 'hex':
-        ret = hex2bin(imm)
+        ret = hex2bin(imm, 32)
     elif base == 'int':
-        ret = int2bin(imm)
+        ret = int2bin(imm, 32)
     else:
         raise AsmException('immediate encode error')
     return ret

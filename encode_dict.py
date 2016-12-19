@@ -103,14 +103,14 @@ aux_reg_encode_dict = {
 # group 000
 group = '000'
 opcode_encode_dict = {
-    's_jal': set_meta(set_func_opcode(0), '0', group),
-    's_jalr': set_meta(set_func_opcode(1), '0', group),
-    's_beq': set_meta(set_func_opcode(2), '0', group),
-    's_bne': set_meta(set_func_opcode(3), '0', group),
-    's_blt': set_meta(set_func_opcode(4), '0', group),
-    's_bltu': set_meta(set_func_opcode(5), '0', group),
-    's_bge': set_meta(set_func_opcode(6), '0', group),
-    's_bgeu': set_meta(set_func_opcode(7), '0', group),
+    's_jal': set_meta(set_func_opcode(0), '1', group),
+    's_jalr': set_meta(set_func_opcode(1), '1', group),
+    's_beq': set_meta(set_func_opcode(2), '1', group),
+    's_bne': set_meta(set_func_opcode(3), '1', group),
+    's_blt': set_meta(set_func_opcode(4), '1', group),
+    's_bltu': set_meta(set_func_opcode(5), '1', group),
+    's_bge': set_meta(set_func_opcode(6), '1', group),
+    's_bgeu': set_meta(set_func_opcode(7), '1', group),
     's_sync': set_meta(set_func_opcode(8), '0', group),
     's_ld_b': set_meta(set_func_opcode(9), '0', group),
     's_ld_h': set_meta(set_func_opcode(10), '0', group),
@@ -118,7 +118,7 @@ opcode_encode_dict = {
     's_st_b': set_meta(set_func_opcode(12), '0', group),
     's_st_h': set_meta(set_func_opcode(13), '0', group),
     's_st_w': set_meta(set_func_opcode(14), '0', group),
-    's_movi': set_meta(set_func_opcode(15), '0', group),
+    's_movi': set_meta(set_func_opcode(15), '1', group),
 }
 
 for i in ['', 'i']:

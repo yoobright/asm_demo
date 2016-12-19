@@ -2,6 +2,7 @@
 from __future__ import print_function
 from exception_util import *
 from encode_dict import opcode_encode_dict
+from parse_util import parse_code
 import re
 import pprint
 
@@ -13,7 +14,7 @@ data_offset_dict = {}
 # data_list = []
 
 addr_offset = 0
-type_list = ['word']
+type_list = ['word', 'half', 'byte']
 
 
 def get_data_elem(line):
@@ -72,7 +73,7 @@ class CodeLine:
         self.line_num = line_num
         self.pc = pc
         self.opcode, self.operand = get_code_elem(line)
-        self.encode_list = ['0'] * 64
+        self.encode_list = None
 
     def __repr__(self):
         return 'opcode: {0}, operand: {1} pc: {2}'.format(
@@ -81,6 +82,10 @@ class CodeLine:
     def get_encode(self):
         if self.encode_list:
             return ''.join(self.encode_list)
+
+    def parse_code(self):
+        self.encode_list = \
+            parse_code(self.opcode, self.operand, tag_pc_dict, data_offset_dict)
 
 
 def load_by_line(file_name, offset=0):
@@ -136,6 +141,9 @@ if __name__ == '__main__':
     pp.pprint(data_offset_dict)
     print("=====tag_pc_dict=====")
     pp.pprint(tag_pc_dict)
+
+    for code_line in code_line_list:
+        code_line.parse_code()
 
     for code_line in code_line_list:
         print(code_line.get_encode())
