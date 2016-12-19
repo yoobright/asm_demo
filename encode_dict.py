@@ -180,7 +180,7 @@ for i in ['_b', '_h', '_w']:
 
 # group 100
 group = '100'
-for i in ['_b', '_h', '_w']:
+for i in ['_f', '_hb', '_b', '_h', '_w']:
     opcode_encode_dict['v_mov' + i] = \
         set_meta(set_func_opcode(0, i), '0', group)
     opcode_encode_dict['v_movi' + i] = \
@@ -190,16 +190,51 @@ for i in ['_b', '_h', '_w']:
     opcode_encode_dict['v_movctr' + i] = \
         set_meta(set_func_opcode(2, i), '0', group)
 
+# group 101
+group = '101'
 for i in ['', 'i']:
     for j in ['_f', '_hb', '_b', '_h', '_w']:
-        opcode_encode_dict['v_mov' + i + j] = ['']
-        opcode_encode_dict['v_add' + i + j] = ['']
-        opcode_encode_dict['v_sub' + i + j] = ['']
-        opcode_encode_dict['v_dotmul' + i + j] = ['']
-        opcode_encode_dict['v_xor' + i + j] = ['']
-        opcode_encode_dict['v_or' + i + j] = ['']
-        opcode_encode_dict['v_and' + i + j] = ['']
-        opcode_encode_dict['v_not' + i + j] = ['']
+        opcode_encode_dict['v_add' + i + j] = \
+            set_meta(set_func_opcode(0, j), set_imm_opcode(i), group)
+        opcode_encode_dict['v_sub' + i + j] = \
+            set_meta(set_func_opcode(1, j), set_imm_opcode(i), group)
+        opcode_encode_dict['v_cmpeq' + i + j] = \
+            set_meta(set_func_opcode(2, j), set_imm_opcode(i), group)
+        opcode_encode_dict['v_cmpne' + i + j] = \
+            set_meta(set_func_opcode(3, j), set_imm_opcode(i), group)
+        opcode_encode_dict['v_cmplt' + i + j] = \
+            set_meta(set_func_opcode(4, j), set_imm_opcode(i), group)
+        opcode_encode_dict['v_cmpltu' + i + j] = \
+            set_meta(set_func_opcode(5, j), set_imm_opcode(i), group)
+        opcode_encode_dict['v_cmpgt' + i + j] = \
+            set_meta(set_func_opcode(6, j), set_imm_opcode(i), group)
+        opcode_encode_dict['v_cmpgtu' + i + j] = \
+            set_meta(set_func_opcode(7, j), set_imm_opcode(i), group)
+        opcode_encode_dict['v_dotmul' + i + j] = \
+            set_meta(set_func_opcode(8, j), set_imm_opcode(i), group)
+
+for i in ['_f', '_hb', '_b', '_h', '_w']:
+    opcode_encode_dict['v_sum' + i] = \
+        set_meta(set_func_opcode(9, i), '0', group)
+    opcode_encode_dict['v_relu' + i] = \
+        set_meta(set_func_opcode(10, i), '0', group)
+    opcode_encode_dict['v_mul' + i] = \
+        set_meta(set_func_opcode(11, i), '0', group)
+    opcode_encode_dict['v_mulacc' + i] = \
+        set_meta(set_func_opcode(12, i), '0', group)
+
+for i in ['_hb', '_b', '_h', '_w']:
+    opcode_encode_dict['v_sigmoid' + i] = (set_func_opcode(13, i), '0', group)
+    opcode_encode_dict['v_tanh' + i] = (set_func_opcode(14, i), '0', group)
+    opcode_encode_dict['v_exp' + i] = (set_func_opcode(15, i), '0', group)
+    opcode_encode_dict['v_log' + i] = (set_func_opcode(16, i), '0', group)
+    opcode_encode_dict['v_sqrt' + i] = (set_func_opcode(17, i), '0', group)
+    opcode_encode_dict['v_fi2fi' + i + j] = (set_func_opcode(18, i), '0', group)
+
+for i in ['', 'i']:
+    for j in ['_f', '_hb', '_b', '_h', '_w']:
+        opcode_encode_dict['v_div' + i + j] = \
+            set_meta(set_func_opcode(19, j), set_imm_opcode(i), group)
 
 for i in ['', 'i']:
     for j in ['_hb', '_b', '_h', '_w']:
@@ -209,6 +244,8 @@ for i in ['', 'i']:
         opcode_encode_dict['v_rol' + i + j] = ['']
         opcode_encode_dict['v_ror' + i + j] = ['']
         opcode_encode_dict['v_fi2fi' + i + j] = ['']
+
+
 
 
 for i in ['_f', '_hb', '_b', '_h', '_w']:
@@ -225,6 +262,10 @@ for i in ['_f', '_hb', '_b', '_h', '_w']:
     opcode_encode_dict['v_maxpolling1d' + i] = ['']
     opcode_encode_dict['v_maxpolling2d' + i] = ['']
 
+opcode_encode_dict['v_xor' + i + j] = set_meta(set_func_opcode(0, j), set_imm_opcode(i), group)
+opcode_encode_dict['v_or' + i + j] = set_meta(set_func_opcode(0, j), set_imm_opcode(i), group)
+opcode_encode_dict['v_and' + i + j] = set_meta(set_func_opcode(0, j), set_imm_opcode(i), group)
+opcode_encode_dict['v_not' + i + j] = set_meta(set_func_opcode(0, j), set_imm_opcode(i), group)
 
 if __name__ == '__main__':
     import pprint
