@@ -1,5 +1,29 @@
 # -*- coding: utf-8 -*-
+from exception_util import AsmException
 
+
+def get_imm_opcode(input_str):
+    if input_str == 'i':
+        return '1'
+    return '0'
+
+
+def get_bit_width_opcode(input_str):
+    if input_str == 'f':
+        return '000'
+    elif input_str == 'hb':
+        return '001'
+    elif input_str == 'b':
+        return '010'
+    elif input_str == 'h':
+        return '011'
+    elif input_str == 'w':
+        return '100'
+    else:
+        raise AsmException('not a valid bit width')
+
+
+# reg
 # ==============================================================================
 reg_encode_dict = {}
 
@@ -21,21 +45,7 @@ for i in range(3):
 # add pr
 reg_encode_dict['pr'] = '111111'
 
-
-opcode_encode_dict = {
-    's_jal': ['0010000'],
-    's_jalr': ['0000000'],
-    's_beq': [''],
-    's_bne': [''],
-    's_bge': [''],
-    's_bltu': [''],
-    's_bgeu': [''],
-    's_wauxi': [''],
-    's_rauxi': [''],
-    's_sync': [''],
-    's_movi': [''],
-}
-
+# aux reg
 # ==============================================================================
 aux_reg_encode_dict = {
     'aux_identity': 0x0,
@@ -72,7 +82,25 @@ aux_reg_encode_dict = {
     'aux_intsat': 0x55,
     'aux_intfxdp': 0x56
 }
+
+# opcode
 # ==============================================================================
+
+# group 000
+opcode_encode_dict = {
+    's_jal': {'function': '00000000', 'imm': '0', 'group': '000'},
+    's_jalr': {'function': '00000000', 'imm': '0', 'group': '000'},
+    's_beq': {'function': '00000000', 'imm': '0', 'group': '000'},
+    's_bne': {'function': '00000000', 'imm': '0', 'group': '000'},
+    's_bge': {'function': '00000000', 'imm': '0', 'group': '000'},
+    's_bltu': {'function': '00000000', 'imm': '0', 'group': '000'},
+    's_bgeu': {'function': '00000000', 'imm': '0', 'group': '000'},
+    's_wauxi': {'function': '00000000', 'imm': '0', 'group': '000'},
+    's_rauxi': {'function': '00000000', 'imm': '0', 'group': '000'},
+    's_sync': {'function': '00000000', 'imm': '0', 'group': '000'},
+    's_movi': {'function': '00000000', 'imm': '0', 'group': '000'},
+}
+
 for i in ['', 'i']:
     opcode_encode_dict['s_add' + i] = ['']
     opcode_encode_dict['s_sub' + i] = ['']

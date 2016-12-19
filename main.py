@@ -72,7 +72,7 @@ class CodeLine:
         self.line_num = line_num
         self.pc = pc
         self.opcode, self.operand = get_code_elem(line)
-        self.encode_list = None
+        self.encode_list = ['0'] * 64
 
     def __repr__(self):
         return 'opcode: {0}, operand: {1} pc: {2}'.format(
