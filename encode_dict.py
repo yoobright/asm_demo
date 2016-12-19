@@ -146,9 +146,13 @@ for i in ['', 'i']:
     opcode_encode_dict['s_cmpgtu' + i] = \
         set_meta(int2bin(30, 8), set_imm_opcode(i), group)
 
-opcode_encode_dict['nop'] = set_meta(int2bin(31, 8), '0', '000'),
+opcode_encode_dict['nop'] = set_meta(int2bin(31, 8), '0', group),
 
 # group 001
+group = '001'
+opcode_encode_dict['s_waux'] = set_meta(int2bin(0, 8), '0', group)
+opcode_encode_dict['s_wauxi'] = set_meta(int2bin(0, 8), '1', group)
+opcode_encode_dict['s_rauxi'] = set_meta(int2bin(1, 8), '1', group)
 
 
 for i in ['_b', '_h', '_w']:
