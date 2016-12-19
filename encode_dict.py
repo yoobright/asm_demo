@@ -44,17 +44,17 @@ reg_encode_dict = {}
 # add sr
 for i in range(32):
     key = 'sr{0}'.format(i)
-    reg_encode_dict[key] = "{:0>5b}".format(i)
+    reg_encode_dict[key] = "{:0>6b}".format(i)
 
 # add vr
 for i in range(8):
     key = 'vr{0}'.format(i)
-    reg_encode_dict[key] = "{:0>5b}".format(i)
+    reg_encode_dict[key] = "{:0>6b}".format(i)
 
 # add vs
 for i in range(3):
     key = 'vs{0}'.format(i)
-    reg_encode_dict[key] = "{:0>5b}".format(i + 16)
+    reg_encode_dict[key] = "{:0>6b}".format(i + 16)
 
 # add pr
 reg_encode_dict['pr'] = '111111'
@@ -153,7 +153,7 @@ for i in ['', 'i']:
     opcode_encode_dict['s_cmpgtu' + i] = \
         set_meta(set_func_opcode(30), set_imm_opcode(i), group)
 
-opcode_encode_dict['nop'] = set_meta(set_func_opcode(31), '0', group),
+opcode_encode_dict['nop'] = set_meta(set_func_opcode(31), '0', group)
 
 # group 001
 group = '001'

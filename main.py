@@ -34,7 +34,9 @@ def get_data_elem(line):
 
     if data_type == 'word':
         data_size = int(data_size) * 4
-    else:
+    elif data_type == 'half':
+        data_size = int(data_size) * 2
+    elif data_type == 'byte':
         data_size = int(data_size)
 
     return data_name, data_type, data_size
