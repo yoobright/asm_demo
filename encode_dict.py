@@ -165,9 +165,30 @@ opcode_encode_dict['s_rauxi'] = set_meta(set_func_opcode(1), '1', group)
 # group 010
 group = '010'
 for i in ['_b', '_h', '_w']:
-    opcode_encode_dict['v_ld' + i] = ['']
-    opcode_encode_dict['v_st' + i] = ['']
+    opcode_encode_dict['v_ld' + i] = \
+        set_meta(set_func_opcode(0, i), '0', group)
+    opcode_encode_dict['v_st' + i] = \
+        set_meta(set_func_opcode(1, i), '0', group)
 
+# group 011
+group = '011'
+for i in ['_b', '_h', '_w']:
+    opcode_encode_dict['v_ilmov' + i] = \
+        set_meta(set_func_opcode(0, i), '0', group)
+    opcode_encode_dict['v_ilbrcst' + i] = \
+        set_meta(set_func_opcode(1, i), '0', group)
+
+# group 100
+group = '100'
+for i in ['_b', '_h', '_w']:
+    opcode_encode_dict['v_mov' + i] = \
+        set_meta(set_func_opcode(0, i), '0', group)
+    opcode_encode_dict['v_movi' + i] = \
+        set_meta(set_func_opcode(0, i), '1', group)
+    opcode_encode_dict['v_movrtc' + i] = \
+        set_meta(set_func_opcode(1, i), '0', group)
+    opcode_encode_dict['v_movctr' + i] = \
+        set_meta(set_func_opcode(2, i), '0', group)
 
 for i in ['', 'i']:
     for j in ['_f', '_hb', '_b', '_h', '_w']:
