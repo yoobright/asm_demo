@@ -202,6 +202,42 @@ def parse_001_1(operand, data_dict=None):
     return ret
 
 
+def parse_010_0(operand):
+    ret = ['0'] * 50
+    encode0 = None
+    encode1 = None
+    encode2 = None
+    if len(operand) == 3:
+        encode0 = parse_reg(operand[0], ['vr', 'vs', 'pr'])
+        encode1 = parse_reg(operand[1], ['sr'])
+        encode2 = parse_reg(operand[2], ['sr'])
+    if encode0 and encode1 and encode2:
+        set_d(ret, encode0)
+        set_a(ret, encode1)
+        set_b(ret, encode2)
+    else:
+        raise AsmException("operand parse error")
+    return ret
+
+
+def parse_011_0(operand):
+    ret = ['0'] * 50
+    encode0 = None
+    encode1 = None
+    encode2 = None
+    if len(operand) == 3:
+        encode0 = parse_reg(operand[0], ['vr'])
+        encode1 = parse_reg(operand[1], ['sr'])
+        encode2 = parse_reg(operand[2], ['sr'])
+    if encode0 and encode1 and encode2:
+        set_d(ret, encode0)
+        set_a(ret, encode1)
+        set_b(ret, encode2)
+    else:
+        raise AsmException("operand parse error")
+    return ret
+
+
 def parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict):
     ret = ['0'] * 50
     if op_type == '000_0':
@@ -218,6 +254,10 @@ def parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict):
         ret = parse_001_0(imm, operand, data_offset_dict)
     elif op_type == '001_1':
         ret = parse_001_1(operand, data_offset_dict)
+    elif op_type == '010_0':
+        ret = parse_010_0(operand)
+    elif op_type == '011_0':
+        ret = parse_011_0(operand)
     return ret
 
 

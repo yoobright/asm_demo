@@ -10,4 +10,6 @@ v_add_f  VR3, VR0, VR0
 s_mulwi SR6, SR1, 7
 s_add  SR3, SR0, SR6
 s_movi SR5, 1
+v_ld_b VS1, SR3, SR4
+v_ilmov_b VR3, SR1, SR15
 s_sync
