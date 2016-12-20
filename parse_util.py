@@ -238,6 +238,60 @@ def parse_011_0(operand):
     return ret
 
 
+def parse_100_0(imm, operand, data_dict=None):
+    ret = ['0'] * 50
+    encode0 = None
+    encode1 = None
+    if len(operand) == 2:
+        a_encode_list = ['vr', 'vs', 'sr']
+        if operand[0] == 'pr':
+            a_encode_list.remove('vs')
+        encode0 = parse_reg(operand[0], ['vr', 'vs', 'pr'])
+        if imm:
+            encode1 = parse_imm(operand[1], data_dict)
+        else:
+            encode1 = parse_reg(operand[1], a_encode_list)
+    if encode0 and encode1:
+        set_d(ret, encode0)
+        if imm:
+            set_imm(ret, encode1)
+        else:
+            set_a(ret, encode1)
+    else:
+        raise AsmException("operand parse error")
+    return ret
+
+
+def parse_100_1(operand):
+    ret = ['0'] * 50
+    encode0 = None
+    encode1 = None
+    if len(operand) == 2:
+        encode0 = parse_reg(operand[0], ['vr', 'pr'])
+        encode1 = parse_reg(operand[1], ['vr', 'vs'])
+    if encode0 and encode1:
+        set_d(ret, encode0)
+        set_a(ret, encode1)
+    else:
+        raise AsmException("operand parse error")
+    return ret
+
+
+def parse_100_2(operand):
+    ret = ['0'] * 50
+    encode0 = None
+    encode1 = None
+    if len(operand) == 2:
+        encode0 = parse_reg(operand[0], ['vr', 'vs'])
+        encode1 = parse_reg(operand[1], ['vr', 'pr'])
+    if encode0 and encode1:
+        set_d(ret, encode0)
+        set_a(ret, encode1)
+    else:
+        raise AsmException("operand parse error")
+    return ret
+
+
 def parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict):
     ret = ['0'] * 50
     if op_type == '000_0':
@@ -258,6 +312,12 @@ def parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict):
         ret = parse_010_0(operand)
     elif op_type == '011_0':
         ret = parse_011_0(operand)
+    elif op_type == '100_0':
+        ret = parse_100_0(imm, operand, data_offset_dict)
+    elif op_type == '100_1':
+        ret = parse_100_1(operand)
+    elif op_type == '100_2':
+        ret = parse_100_2(operand)
     return ret
 
 

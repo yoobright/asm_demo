@@ -193,9 +193,9 @@ for i in ['_f', '_hb', '_b', '_h', '_w']:
     opcode_encode_dict['v_movi' + i] = \
         set_meta(set_func_opcode(0, i), '1', group, '0')
     opcode_encode_dict['v_movrtc' + i] = \
-        set_meta(set_func_opcode(1, i), '0', group, '0')
+        set_meta(set_func_opcode(1, i), '0', group, '1')
     opcode_encode_dict['v_movctr' + i] = \
-        set_meta(set_func_opcode(2, i), '0', group, '0')
+        set_meta(set_func_opcode(2, i), '0', group, '2')
 
 # group 101
 group = '101'
