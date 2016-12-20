@@ -72,5 +72,5 @@ def aux_reg_encode(input_str, reg_dict):
     ret = None
     aux_reg_name = input_str[1:-1]
     if aux_reg_name in reg_dict:
-        ret = hex2bin(reg_dict[aux_reg_name], truncate=8)
+        ret = hex2bin(reg_dict[aux_reg_name], truncate=6)
     return ret

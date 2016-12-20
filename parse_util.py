@@ -8,6 +8,10 @@ from encode_util import *
 
 def set_imm(input_list, encode):
     if len(input_list) == 50:
+        encode_len = len(encode)
+        print(encode_len)
+        if encode_len < 32:
+            encode = '0' * (32 - encode_len) + encode
         input_list[0:32] = encode
 
 
@@ -24,6 +28,13 @@ def set_a(input_list, encode):
 def set_b(input_list, encode):
     if len(input_list) == 50:
         input_list[44:50] = encode
+
+
+def parse_aux_reg(input_str):
+    ret = None
+    if check_aux_reg_name(input_str):
+        ret = aux_reg_encode(input_str, aux_reg_encode_dict)
+    return ret
 
 
 def parse_mem_data_addr(input_str, data_dict):
@@ -155,6 +166,42 @@ def parse_000_4(imm, operand, data_dict=None):
     return ret
 
 
+def parse_001_0(imm, operand, data_dict=None):
+    ret = ['0'] * 50
+    encode0 = None
+    encode1 = None
+    if len(operand) == 2:
+        encode0 = parse_aux_reg(operand[0])
+        if imm:
+            encode1 = parse_imm(operand[1], data_dict)
+        else:
+            encode1 = parse_reg(operand[1], ['sr'])
+    if encode0 and encode1:
+        set_d(ret, encode0)
+        if imm:
+            set_imm(ret, encode1)
+        else:
+            set_a(ret, encode1)
+    else:
+        raise AsmException("operand parse error")
+    return ret
+
+
+def parse_001_1(operand, data_dict=None):
+    ret = ['0'] * 50
+    encode0 = None
+    encode1 = None
+    if len(operand) == 2:
+        encode0 = parse_reg(operand[0], ['sr'])
+        encode1 = parse_aux_reg(operand[1])
+    if encode0 and encode1:
+        set_d(ret, encode0)
+        set_imm(ret, encode1)
+    else:
+        raise AsmException("operand parse error")
+    return ret
+
+
 def parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict):
     ret = ['0'] * 50
     if op_type == '000_0':
@@ -165,6 +212,12 @@ def parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict):
         pass
     elif op_type == '000_3':
         ret = parse_000_3(imm, operand, data_offset_dict)
+    elif op_type == '000_4':
+        ret = parse_000_4(imm, operand, data_offset_dict)
+    elif op_type == '001_0':
+        ret = parse_001_0(imm, operand, data_offset_dict)
+    elif op_type == '001_1':
+        ret = parse_001_1(operand, data_offset_dict)
     return ret
 
 

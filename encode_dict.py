@@ -126,7 +126,7 @@ opcode_encode_dict['s_ld_w'] = set_meta(set_func_opcode(11), '0', group, '3')
 opcode_encode_dict['s_st_b'] = set_meta(set_func_opcode(12), '0', group, '3')
 opcode_encode_dict['s_st_h'] = set_meta(set_func_opcode(13), '0', group, '3')
 opcode_encode_dict['s_st_w'] = set_meta(set_func_opcode(14), '0', group, '3')
-opcode_encode_dict['s_movi'] = set_meta(set_func_opcode(15), '0', group, '4')
+opcode_encode_dict['s_movi'] = set_meta(set_func_opcode(15), '1', group, '4')
 
 for i in ['', 'i']:
     opcode_encode_dict['s_add' + i] = \
@@ -166,7 +166,7 @@ opcode_encode_dict['nop'] = set_meta(set_func_opcode(31), '0', group, '2')
 group = '001'
 opcode_encode_dict['s_waux'] = set_meta(set_func_opcode(0), '0', group, '0')
 opcode_encode_dict['s_wauxi'] = set_meta(set_func_opcode(0), '1', group, '0')
-opcode_encode_dict['s_rauxi'] = set_meta(set_func_opcode(1), '1', group, '0')
+opcode_encode_dict['s_rauxi'] = set_meta(set_func_opcode(1), '1', group, '1')
 
 
 # group 010

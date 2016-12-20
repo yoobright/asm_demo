@@ -7,6 +7,7 @@ loop1: s_addi  SR1, SR0, $(data2)
 s_addi  SR2, SR0, 0
 s_addi  SR4, SR0, 0
 v_add_f  VR3, VR0, VR0
-s_mulwi SR6, SR1, 75
+s_mulwi SR6, SR1, 7
 s_add  SR3, SR0, SR6
+s_movi SR5, 1
 s_sync
