@@ -134,7 +134,7 @@ if __name__ == '__main__':
 
     load_by_line(input_file, addr_offset)
 
-    pp = pprint.PrettyPrinter(indent=4)
+    pp = pprint.PrettyPrinter(indent=2)
     print("=====data_line_list=====")
     pp.pprint(data_line_list)
     print("=====code_line_list=====")
@@ -145,7 +145,11 @@ if __name__ == '__main__':
     pp.pprint(tag_pc_dict)
 
     for code_line in code_line_list:
-        code_line.parse_code()
+        try:
+            code_line.parse_code()
+        except AsmException as ex:
+            print("Asm parse exception in line: {0}".format(code_line.line_num))
+            raise ex
 
     for code_line in code_line_list:
         print(code_line.get_encode())
