@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 from exception_util import AsmException
-from encode_dict import *
 
 
 def check_hex(check_input):
@@ -59,14 +58,6 @@ def imm_encode(imm, base):
         ret = hex2bin(imm, 32)
     elif base == 'int':
         ret = int2bin(imm, 32)
-    return ret
-
-
-def mem_data_addr_encode(input_str, data_dict):
-    ret = None
-    mem_data_name = input_str[2:-1]
-    if mem_data_name in data_dict:
-        ret = int2bin(data_dict[mem_data_name])
     return ret
 
 

@@ -87,7 +87,8 @@ class CodeLine:
 
     def parse_code(self):
         self.encode_list = \
-            parse_code(self.opcode, self.operand, tag_pc_dict, data_offset_dict)
+            parse_code(self.opcode, self.operand, self.pc,
+                       tag_pc_dict, data_offset_dict)
 
 
 def load_by_line(file_name, offset=0):

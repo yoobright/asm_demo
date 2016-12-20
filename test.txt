@@ -3,10 +3,10 @@ data1 word, 111
 data2 word, 222
 data3 word, 222
 _CODE
-loop1: s_add  SR1, SR0, 0
-s_add  SR2, SR0, 0
-s_add  SR4, SR0, 0
+loop1: s_addi  SR1, SR0, 0
+s_addi  SR2, SR0, 0
+s_addi  SR4, SR0, 0
 v_add_f  VR3, VR0, VR0
-s_mulw SR6, SR1, 75
+s_mulwi SR6, SR1, 75
 s_add  SR3, SR0, SR6
 s_sync
