@@ -38,7 +38,7 @@ def parse_imm(input_str, data_dict=None):
     ret = None
     if check_mem_data_name(input_str) and data_dict:
         input_str = parse_mem_data_addr(input_str, data_dict)
-        if not input_str:
+        if input_str is None:
             raise AsmException('mem addr encode error')
     if check_hex(input_str):
         ret = imm_encode(input_str, 'hex')
