@@ -5,9 +5,11 @@ from encode_dict import *
 from exception_util import AsmException
 from encode_util import *
 
+OPERAND_ENCODE_WIDTH = 50
+
 
 def set_imm(input_list, encode):
-    if len(input_list) == 50:
+    if len(input_list) == OPERAND_ENCODE_WIDTH:
         encode_len = len(encode)
         print(encode_len)
         if encode_len < 32:
@@ -16,17 +18,17 @@ def set_imm(input_list, encode):
 
 
 def set_d(input_list, encode):
-    if len(input_list) == 50:
+    if len(input_list) == OPERAND_ENCODE_WIDTH:
         input_list[32:38] = encode
 
 
 def set_a(input_list, encode):
-    if len(input_list) == 50:
+    if len(input_list) == OPERAND_ENCODE_WIDTH:
         input_list[38:44] = encode
 
 
 def set_b(input_list, encode):
-    if len(input_list) == 50:
+    if len(input_list) == OPERAND_ENCODE_WIDTH:
         input_list[44:50] = encode
 
 
@@ -91,7 +93,7 @@ def parse_opcode(opcode):
 
 
 def parse_000_0(operand, pc, tag_pc_dict):
-    ret = ['0'] * 50
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
     encode0 = None
     encode1 = None
     encode2 = None
@@ -109,7 +111,7 @@ def parse_000_0(operand, pc, tag_pc_dict):
 
 
 def parse_000_1(operand, pc, tag_pc_dict):
-    ret = ['0'] * 50
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
     encode0 = None
     encode1 = None
     encode2 = None
@@ -127,7 +129,7 @@ def parse_000_1(operand, pc, tag_pc_dict):
 
 
 def parse_000_3(imm, operand, data_dict=None):
-    ret = ['0'] * 50
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
     encode0 = None
     encode1 = None
     encode2 = None
@@ -151,7 +153,7 @@ def parse_000_3(imm, operand, data_dict=None):
 
 
 def parse_000_4(imm, operand, data_dict=None):
-    ret = ['0'] * 50
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
     encode0 = None
     encode1 = None
     if len(operand) == 2:
@@ -167,7 +169,7 @@ def parse_000_4(imm, operand, data_dict=None):
 
 
 def parse_001_0(imm, operand, data_dict=None):
-    ret = ['0'] * 50
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
     encode0 = None
     encode1 = None
     if len(operand) == 2:
@@ -187,8 +189,8 @@ def parse_001_0(imm, operand, data_dict=None):
     return ret
 
 
-def parse_001_1(operand, data_dict=None):
-    ret = ['0'] * 50
+def parse_001_1(operand):
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
     encode0 = None
     encode1 = None
     if len(operand) == 2:
@@ -203,7 +205,7 @@ def parse_001_1(operand, data_dict=None):
 
 
 def parse_010_0(operand):
-    ret = ['0'] * 50
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
     encode0 = None
     encode1 = None
     encode2 = None
@@ -221,7 +223,7 @@ def parse_010_0(operand):
 
 
 def parse_011_0(operand):
-    ret = ['0'] * 50
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
     encode0 = None
     encode1 = None
     encode2 = None
@@ -239,7 +241,7 @@ def parse_011_0(operand):
 
 
 def parse_100_0(imm, operand, data_dict=None):
-    ret = ['0'] * 50
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
     encode0 = None
     encode1 = None
     if len(operand) == 2:
@@ -263,7 +265,7 @@ def parse_100_0(imm, operand, data_dict=None):
 
 
 def parse_100_1(operand):
-    ret = ['0'] * 50
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
     encode0 = None
     encode1 = None
     if len(operand) == 2:
@@ -278,7 +280,7 @@ def parse_100_1(operand):
 
 
 def parse_100_2(operand):
-    ret = ['0'] * 50
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
     encode0 = None
     encode1 = None
     if len(operand) == 2:
@@ -292,8 +294,58 @@ def parse_100_2(operand):
     return ret
 
 
+def parse_101_0(operand):
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
+    return ret
+
+
+def parse_101_1(operand):
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
+    return ret
+
+
+def parse_101_2(operand):
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
+    return ret
+
+
+def parse_101_3(operand):
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
+    return ret
+
+
+def parse_101_4(operand):
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
+    return ret
+
+
+def parse_110_0(operand):
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
+    return ret
+
+
+def parse_110_1(operand):
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
+    return ret
+
+
+def parse_110_2(operand):
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
+    return ret
+
+
+def parse_111_0(operand):
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
+    return ret
+
+
+def parse_111_1(operand):
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
+    return ret
+
+
 def parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict):
-    ret = ['0'] * 50
+    ret = ['0'] * OPERAND_ENCODE_WIDTH
     if op_type == '000_0':
         ret = parse_000_0(operand, pc, tag_pc_dict)
     elif op_type == '000_1':
@@ -307,7 +359,7 @@ def parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict):
     elif op_type == '001_0':
         ret = parse_001_0(imm, operand, data_offset_dict)
     elif op_type == '001_1':
-        ret = parse_001_1(operand, data_offset_dict)
+        ret = parse_001_1(operand)
     elif op_type == '010_0':
         ret = parse_010_0(operand)
     elif op_type == '011_0':
@@ -318,6 +370,26 @@ def parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict):
         ret = parse_100_1(operand)
     elif op_type == '100_2':
         ret = parse_100_2(operand)
+    elif op_type == '101_0':
+        ret = parse_101_0(operand)
+    elif op_type == '101_1':
+        ret = parse_101_1(operand)
+    elif op_type == '101_2':
+        ret = parse_101_2(operand)
+    elif op_type == '101_3':
+        ret = parse_101_3(operand)
+    elif op_type == '101_4':
+        ret = parse_101_4(operand)
+    elif op_type == '110_0':
+        ret = parse_110_0(operand)
+    elif op_type == '110_1':
+        ret = parse_110_1(operand)
+    elif op_type == '110_2':
+        ret = parse_110_2(operand)
+    elif op_type == '111_0':
+        ret = parse_111_0(operand)
+    elif op_type == '111_1':
+        ret = parse_111_1(operand)
     return ret
 
 
