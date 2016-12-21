@@ -317,39 +317,127 @@ def parse_101_0(imm, operand, data_dict=None):
     return ret
 
 
-
 def parse_101_1(imm, operand, data_dict=None):
     ret = ['0'] * OPERAND_ENCODE_WIDTH
+    encode0 = None
+    encode1 = None
+    if len(operand) == 2:
+        encode0 = parse_reg(operand[0], ['vr', 'pr'])
+        encode1 = parse_reg(operand[1], ['vr'])
+    if encode0 and encode1:
+        set_d(ret, encode0)
+        set_a(ret, encode1)
+    else:
+        raise AsmException("operand parse error")
     return ret
 
 
 def parse_101_2(imm, operand, data_dict=None):
     ret = ['0'] * OPERAND_ENCODE_WIDTH
+    encode0 = None
+    encode1 = None
+    encode2 = None
+    if len(operand) == 3:
+        encode0 = parse_reg(operand[0], ['vr'])
+        encode1 = parse_reg(operand[1], ['vr'])
+        if imm:
+            encode2 = parse_imm(operand[2], data_dict)
+        else:
+            encode2 = parse_reg(operand[2], ['sr'])
+    if encode0 and encode1 and encode2:
+        set_d(ret, encode0)
+        set_a(ret, encode1)
+        if imm:
+            set_imm(ret, encode2)
+        else:
+            set_b(ret, encode2)
+    else:
+        raise AsmException("operand parse error")
     return ret
 
 
 def parse_101_3(imm, operand, data_dict=None):
     ret = ['0'] * OPERAND_ENCODE_WIDTH
+    encode0 = None
+    encode1 = None
+    encode2 = None
+    if len(operand) == 3:
+        encode0 = parse_reg(operand[0], ['vr', 'pr'])
+        encode1 = parse_reg(operand[1], ['vr'])
+        encode2 = parse_reg(operand[2], ['vr', 'vs'])
+    if encode0 and encode1 and encode2:
+        set_d(ret, encode0)
+        set_a(ret, encode1)
+        set_b(ret, encode2)
+    else:
+        raise AsmException("operand parse error")
     return ret
 
 
 def parse_101_4(imm, operand, data_dict=None):
     ret = ['0'] * OPERAND_ENCODE_WIDTH
+    encode0 = None
+    encode1 = None
+    if len(operand) == 2:
+        encode0 = parse_reg(operand[0], ['vr'])
+        encode1 = parse_reg(operand[1], ['vr'])
+    if encode0 and encode1:
+        set_d(ret, encode0)
+        set_a(ret, encode1)
+    else:
+        raise AsmException("operand parse error")
     return ret
 
 
 def parse_110_0(imm, operand, data_dict=None):
     ret = ['0'] * OPERAND_ENCODE_WIDTH
+    encode0 = None
+    encode1 = None
+    encode2 = None
+    if len(operand) == 3:
+        encode0 = parse_reg(operand[0], ['vr'])
+        encode1 = parse_reg(operand[1], ['vr'])
+        encode2 = parse_reg(operand[2], ['vr', 'vs'])
+    if encode0 and encode1 and encode2:
+        set_d(ret, encode0)
+        set_a(ret, encode1)
+        set_b(ret, encode2)
+    else:
+        raise AsmException("operand parse error")
     return ret
 
 
 def parse_110_1(imm, operand, data_dict=None):
     ret = ['0'] * OPERAND_ENCODE_WIDTH
+    encode0 = None
+    encode1 = None
+    encode2 = None
+    if len(operand) == 3:
+        encode0 = parse_reg(operand[0], ['vr'])
+        encode1 = parse_reg(operand[1], ['vr'])
+        encode2 = parse_reg(operand[2], ['vs'])
+    if encode0 and encode1 and encode2:
+        set_d(ret, encode0)
+        set_a(ret, encode1)
+        set_b(ret, encode2)
+    else:
+        raise AsmException("operand parse error")
     return ret
 
 
 def parse_110_2(imm, operand, data_dict=None):
     ret = ['0'] * OPERAND_ENCODE_WIDTH
+    encode0 = None
+    encode1 = None
+    encode2 = None
+    if len(operand) == 2:
+        encode0 = parse_reg(operand[0], ['vr'])
+        encode1 = parse_reg(operand[1], ['vr'])
+    if encode0 and encode1 and encode2:
+        set_d(ret, encode0)
+        set_a(ret, encode1)
+    else:
+        raise AsmException("operand parse error")
     return ret
 
 
