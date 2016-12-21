@@ -11,7 +11,7 @@ code_line_list = []
 tag_pc_dict = {}
 data_offset_dict = {}
 
-# data_list = []
+# data_list = []a
 
 addr_offset = 0
 type_list = ['word', 'half', 'byte']
@@ -85,6 +85,19 @@ class CodeLine:
         if self.encode_list:
             return ''.join(self.encode_list)
 
+    def get_pretty_encode(self):
+        if self.encode_list:
+            ret = list(self.encode_list)
+            ret.insert(2, '_')
+            ret.insert(35, '_')
+            ret.insert(42, '_')
+            ret.insert(49, '_')
+            ret.insert(56, '_')
+            ret.insert(62, '_')
+            ret.insert(66, '_')
+            ret.insert(68, '_')
+            return ''.join(ret)
+
     def parse_code(self, pc_dict, data_dict):
         self.encode_list = \
             parse_code(self.opcode, self.operand, self.pc,
@@ -153,4 +166,5 @@ if __name__ == '__main__':
             raise ex
 
     for code_line in code_line_list:
-        print(code_line.get_encode())
+        print(code_line.get_pretty_encode())
+
