@@ -5,6 +5,7 @@ from encode_dict import opcode_encode_dict
 from parse_util import parse_code
 import re
 import pprint
+import argparse
 
 data_line_list = []
 code_line_list = []
@@ -105,7 +106,7 @@ class CodeLine:
 
 
 def load_by_line(file_name, offset=0):
-    with open(file_name) as f:
+    with open(file_name, 'r') as f:
         state = None
         line_count = 1
         pc_count = 0
@@ -142,21 +143,11 @@ def load_by_line(file_name, offset=0):
     return True
 
 
-if __name__ == '__main__':
-
+def main():
     input_file = "test.txt"
+    pp = pprint.PrettyPrinter(indent=2)
 
     load_by_line(input_file, addr_offset)
-
-    pp = pprint.PrettyPrinter(indent=2)
-    print("=====data_line_list=====")
-    pp.pprint(data_line_list)
-    print("=====code_line_list=====")
-    pp.pprint(code_line_list)
-    print("=====data_offset_dict=====")
-    pp.pprint(data_offset_dict)
-    print("=====tag_pc_dict=====")
-    pp.pprint(tag_pc_dict)
 
     for code_line in code_line_list:
         try:
@@ -165,6 +156,37 @@ if __name__ == '__main__':
             print("Asm parse exception in line: {0}".format(code_line.line_num))
             raise ex
 
-    for code_line in code_line_list:
-        print(code_line.get_pretty_encode())
+    if verbose:
+        print("=====data_line_list=====")
+        pp.pprint(data_line_list)
+        print("=====code_line_list=====")
+        pp.pprint(code_line_list)
+        print("=====data_offset_dict=====")
+        pp.pprint(data_offset_dict)
+        print("=====tag_pc_dict=====")
+        pp.pprint(tag_pc_dict)
+
+        for code_line in code_line_list:
+            print(code_line.get_pretty_encode())
+
+    if output_file:
+        with open(output_file, 'w') as f:
+            for code_line in code_line_list:
+                f.write(code_line.get_encode()+'\n')
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input', type=str, default=None,
+                        help="input file name")
+    parser.add_argument('-o', '--output', type=str, default=None,
+                        help="output file name")
+    parser.add_argument("-v", '--verbose', action="store_true",
+                        help="increase output verbosity")
+    args = parser.parse_args()
+
+    input_file = args.input
+    output_file = args.output
+    verbose = args.verbose
+
+    main()
 
