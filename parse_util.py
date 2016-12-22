@@ -13,22 +13,36 @@ def set_imm(input_list, encode):
         encode_len = len(encode)
         if encode_len < 32:
             encode = '0' * (32 - encode_len) + encode
-        input_list[0:32] = encode
+        input_list[OPERAND_ENCODE_WIDTH-50:OPERAND_ENCODE_WIDTH-18] = encode
 
 
 def set_d(input_list, encode):
     if len(input_list) == OPERAND_ENCODE_WIDTH:
-        input_list[32:38] = encode
+        input_list[OPERAND_ENCODE_WIDTH-18:OPERAND_ENCODE_WIDTH-12] = encode
 
 
 def set_a(input_list, encode):
     if len(input_list) == OPERAND_ENCODE_WIDTH:
-        input_list[38:44] = encode
+        input_list[OPERAND_ENCODE_WIDTH-12:OPERAND_ENCODE_WIDTH-6] = encode
 
 
 def set_b(input_list, encode):
     if len(input_list) == OPERAND_ENCODE_WIDTH:
-        input_list[44:50] = encode
+        input_list[OPERAND_ENCODE_WIDTH-6:OPERAND_ENCODE_WIDTH] = encode
+
+
+def set_a_imm(imm, input_list, encode):
+    if imm:
+        return set_imm(input_list, encode)
+    else:
+        return set_a(input_list, encode)
+
+
+def set_b_imm(imm, input_list, encode):
+    if imm:
+        return set_imm(input_list, encode)
+    else:
+        return set_b(input_list, encode)
 
 
 def parse_aux_reg(input_str):
@@ -80,6 +94,13 @@ def parse_reg(input_str, reg_type_list):
         reg_dict = dict(reg_list)
         ret = reg_encode(input_str, reg_dict)
     return ret
+
+
+def parse_reg_imm(imm, data_dict, input_str, reg_type_list):
+    if imm:
+        return parse_imm(input_str, data_dict)
+    else:
+        return parse_reg(input_str, reg_type_list)
 
 
 def parse_opcode(opcode):
