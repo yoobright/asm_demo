@@ -50,13 +50,13 @@ for i in range(32):
 vr_encode_dict = {}
 for i in range(8):
     key = 'vr{0}'.format(i)
-    vr_encode_dict[key] = "{:0>6b}".format(i)
+    vr_encode_dict[key] = "{:0>6b}".format(i + 32)
 
 # add vs
 vs_encode_dict = {}
-for i in range(3):
+for i in range(5):
     key = 'vs{0}'.format(i)
-    vs_encode_dict[key] = "{:0>6b}".format(i + 16)
+    vs_encode_dict[key] = "{:0>6b}".format(i + 48)
 
 # add pr
 pr_encode_dict = {'pr': '111111'}
