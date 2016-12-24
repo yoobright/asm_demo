@@ -19,6 +19,13 @@ def check_int(check_input):
     return False
 
 
+def check_bin(check_input):
+    bin_pattern = re.compile(r'0b([01]+|[01]+_)*[01]+$')
+    match = bin_pattern.match(str(check_input))
+    if match:
+        return True
+    return False
+
 def check_mem_data_name(check_input):
     mem_data_pattern = re.compile(r'\$\(\w+\)$')
     match = mem_data_pattern.match(str(check_input))
@@ -44,6 +51,15 @@ def hex2bin(input_num, truncate=None):
     return ret
 
 
+def bin2bin(input_num, truncate=None):
+    int_num = None
+    if isinstance(input_num, str):
+        input_num = input_num.replace("_", "")
+        int_num = int(input_num, 2)
+    ret = int2bin(int_num, truncate)
+    return ret
+
+
 def int2bin(input_num, truncate=None):
     ret = '{:0>64b}'.format(
             (int(input_num) + 0x10000000000000000) & 0xffffffffffffffff)
@@ -58,6 +74,8 @@ def imm_encode(imm, base):
         ret = hex2bin(imm, 32)
     elif base == 'int':
         ret = int2bin(imm, 32)
+    elif base == 'bin':
+        ret = bin2bin(imm, 32)
     return ret
 
 

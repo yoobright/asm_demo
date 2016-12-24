@@ -70,13 +70,17 @@ def parse_imm(input_str, data_dict=None):
         ret = imm_encode(input_str, 'hex')
     elif check_int(input_str):
         ret = imm_encode(input_str, 'int')
+    elif check_bin(input_str):
+        ret = imm_encode(input_str, 'bin')
     return ret
 
 
 def parse_j_imm(input_str, pc, tag_dict):
+    ret = None
     if input_str in tag_dict:
         input_str = '{}'.format(pc - tag_dict[input_str])
-    return parse_imm(input_str)
+        ret = parse_imm(input_str)
+    return ret
 
 
 def parse_reg(input_str, reg_type_list):
