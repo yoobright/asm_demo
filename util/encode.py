@@ -2,7 +2,8 @@
 import re
 import sys
 import numpy as np
-from exception_util import AsmException
+from exception import AsmException
+
 
 def is_string(s):
     # if we use Python 3

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-from exception_util import *
-from encode_dict import opcode_encode_dict
-from parse_util import parse_code
-import re
-import pprint
+
 import argparse
+import pprint
+import re
+
+from util.encode_dict import opcode_encode_dict
+from util.exception import *
+from util.parse import parse_code
 
 data_line_list = []
 code_line_list = []

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from exception_util import AsmException
-from encode_util import int2bin
+from exception import AsmException
+from encode import int2bin
 
 
 def set_imm_opcode(input_str):
@@ -273,7 +273,7 @@ for i in ['_f', '_hb', '_b', '_h', '_w']:
     opcode_encode_dict['v_maxpooling2d' + i] = \
         set_meta(set_func_opcode(3, i), '0', group, '2')
 
-# group 110
+# group 111
 group = '111'
 for i in ['', 'i']:
     for j in ['_f', '_hb', '_b', '_h', '_w']:

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-from encode_dict import *
-# from encode_dict import opcode_encode_dict
-from exception_util import AsmException
-from encode_util import *
+
+from util.encode import *
+from util.encode_dict import *
 
 OPERAND_ENCODE_WIDTH = 50
 
@@ -75,7 +74,7 @@ def parse_imm(input_str, data_dict=None):
     elif check_bin(input_str):
         ret = imm_encode(input_str, 'bin')
     elif check_num(input_str):
-
+        ret == imm_encode(input_str, 'num')
     return ret
 
 
