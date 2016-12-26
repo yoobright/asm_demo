@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 import re
+import sys
+import numpy as np
 from exception_util import AsmException
+
+def is_string(s):
+    # if we use Python 3
+    if sys.version_info[0] >= 3:
+        return isinstance(s, str)
+    # we use Python 2
+    return isinstance(s, basestring)
 
 
 def check_hex(check_input):
@@ -14,6 +23,14 @@ def check_hex(check_input):
 def check_int(check_input):
     int_pattern = re.compile(r'-*[0-9]+$')
     match = int_pattern.match(str(check_input))
+    if match:
+        return True
+    return False
+
+
+def check_num(check_input):
+    num_pattern = re.compile(r'[-+]?[0-9]*\.?[0-9]+$')
+    match = num_pattern.match(str(check_input))
     if match:
         return True
     return False
@@ -55,7 +72,7 @@ def hex2bin(input_num, truncate=None):
 
 def bin2bin(input_num, truncate=None):
     int_num = None
-    if isinstance(input_num, str):
+    if is_string(input_num):
         input_num = input_num.replace("_", "")
         int_num = int(input_num, 2)
     ret = int2bin(int_num, truncate)
@@ -70,6 +87,13 @@ def int2bin(input_num, truncate=None):
     return ret
 
 
+def single2bin(input_num, truncate=32):
+    if is_string(input_num):
+        input_num = eval(input_num)
+    ret = np.binary_repr(np.float32(input_num).view(np.int32), truncate)
+    return ret
+
+
 def imm_encode(imm, base):
     ret = None
     if base == 'hex':
@@ -78,6 +102,8 @@ def imm_encode(imm, base):
         ret = int2bin(imm, 32)
     elif base == 'bin':
         ret = bin2bin(imm, 32)
+    elif base == 'num':
+        ret = single2bin(imm, 32)
     return ret
 
 

@@ -74,6 +74,8 @@ def parse_imm(input_str, data_dict=None):
         ret = imm_encode(input_str, 'int')
     elif check_bin(input_str):
         ret = imm_encode(input_str, 'bin')
+    elif check_num(input_str):
+
     return ret
 
 

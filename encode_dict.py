@@ -87,7 +87,7 @@ aux_reg_encode_dict = {
     'aux_mvvdcidx': 10,
     # Vector Computation Control
     'aux_vlen0': 12,
-    'aux_updw': 13,
+    'aux_dwup': 13,
     'aux_vlen1': 14,
     'aux_vlen2': 15,
     'aux_sldstrd1': 16,
