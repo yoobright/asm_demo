@@ -26,8 +26,10 @@ def check_bin(check_input):
         return True
     return False
 
+
 def check_mem_data_name(check_input):
-    mem_data_pattern = re.compile(r'\$\(\w+\)$')
+    # mem_data_pattern = re.compile(r'\$\(\w+\)$')
+    mem_data_pattern = re.compile(r'\$\w+$')
     match = mem_data_pattern.match(str(check_input))
     if match:
         return True

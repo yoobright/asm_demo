@@ -54,7 +54,8 @@ def parse_aux_reg(input_str):
 
 def parse_mem_data_addr(input_str, data_dict):
     ret = None
-    mem_data_name = input_str[2:-1]
+    # mem_data_name = input_str[2:-1]
+    mem_data_name = input_str[1:]
     if mem_data_name in data_dict:
         ret = data_dict[mem_data_name]
     return ret
@@ -66,6 +67,7 @@ def parse_imm(input_str, data_dict=None):
         input_str = parse_mem_data_addr(input_str, data_dict)
         if input_str is None:
             raise AsmException('mem addr encode error')
+
     if check_hex(input_str):
         ret = imm_encode(input_str, 'hex')
     elif check_int(input_str):
@@ -160,17 +162,11 @@ def parse_000_3(imm, operand, data_dict=None):
     if len(operand) == 3:
         encode0 = parse_reg(operand[0], ['sr'])
         encode1 = parse_reg(operand[1], ['sr'])
-        if imm:
-            encode2 = parse_imm(operand[2], data_dict)
-        else:
-            encode2 = parse_reg(operand[2], ['sr'])
+        encode2 = parse_reg_imm(imm, data_dict, operand[2], ['sr'])
     if encode0 and encode1 and encode2:
         set_d(ret,encode0)
         set_a(ret, encode1)
-        if imm:
-            set_imm(ret, encode2)
-        else:
-            set_b(ret, encode2)
+        set_b_imm(imm, ret, encode2)
     else:
         raise AsmException("operand parse error")
     return ret
@@ -236,11 +232,11 @@ def parse_010_0(imm, operand, data_dict=None):
     if len(operand) == 3:
         encode0 = parse_reg(operand[0], ['vr', 'vs', 'pr'])
         encode1 = parse_reg(operand[1], ['sr'])
-        encode2 = parse_reg(operand[2], ['sr'])
+        encode2 = parse_reg_imm(imm, data_dict, operand[2], ['sr'])
     if encode0 and encode1 and encode2:
         set_d(ret, encode0)
         set_a(ret, encode1)
-        set_b(ret, encode2)
+        set_b_imm(imm, ret, encode2)
     else:
         raise AsmException("operand parse error")
     return ret
@@ -454,11 +450,10 @@ def parse_110_2(imm, operand, data_dict=None):
     ret = ['0'] * OPERAND_ENCODE_WIDTH
     encode0 = None
     encode1 = None
-    encode2 = None
     if len(operand) == 2:
         encode0 = parse_reg(operand[0], ['vr'])
         encode1 = parse_reg(operand[1], ['vr'])
-    if encode0 and encode1 and encode2:
+    if encode0 and encode1:
         set_d(ret, encode0)
         set_a(ret, encode1)
     else:
@@ -568,6 +563,10 @@ def parse_code(opcode, operand, pc, tag_pc_dict, data_offset_dict):
     ret[-12:] = parse_opcode(opcode)
     op_type = opcode_encode_dict[opcode]['type']
     imm = bool(int(opcode_encode_dict[opcode]['imm']))
+    # TODO encode confuse
+    if op_type in ['000_3', '010_0']:
+        imm = imm or check_mem_data_name(operand[2])
+        ret[-4] = str(int(imm))
     ret[2:-12] = \
         parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict)
     return ret

@@ -48,7 +48,7 @@ for i in range(32):
 
 # add vr
 vr_encode_dict = {}
-for i in range(8):
+for i in range(9):
     key = 'vr{0}'.format(i)
     vr_encode_dict[key] = "{:0>6b}".format(i + 32)
 
@@ -268,9 +268,9 @@ for i in ['_f', '_hb', '_b', '_h', '_w']:
         set_meta(set_func_opcode(0, i), '0', group, '0')
     opcode_encode_dict['v_cnv2d' + i] = \
         set_meta(set_func_opcode(1, i), '0', group, '1')
-    opcode_encode_dict['v_maxpolling1d' + i] = \
+    opcode_encode_dict['v_maxpooling1d' + i] = \
         set_meta(set_func_opcode(2, i), '0', group, '2')
-    opcode_encode_dict['v_maxpolling2d' + i] = \
+    opcode_encode_dict['v_maxpooling2d' + i] = \
         set_meta(set_func_opcode(3, i), '0', group, '2')
 
 # group 110

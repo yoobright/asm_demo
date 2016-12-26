@@ -107,17 +107,18 @@ class CodeLine:
 
 def load_by_line(file_name, offset=0):
     with open(file_name, 'r') as f:
+        print("load file ...")
         state = None
         line_count = 1
         pc_count = 0
         for file_line in f.readlines():
             try:
-                line_data = file_line.strip().split('#')[0].strip().lower()
-                if line_data.startswith('_data'):
+                line_data = file_line.strip().split(';')[0].strip().lower()
+                if line_data.startswith('__data'):
                     state = 'data'
                     line_count += 1
                     continue
-                if line_data.startswith('_code'):
+                if line_data.startswith('__code'):
                     state = 'code'
                     line_count += 1
                     continue
@@ -133,9 +134,10 @@ def load_by_line(file_name, offset=0):
                     if ':' in line_data:
                         tag, line_data, = line_data.split(':')
                         tag_pc_dict[tag] = pc_count
-                    code_line_list.append(
-                        CodeLine(line_data, line_count, pc_count))
-                    pc_count += 1
+                    if line_data:
+                        code_line_list.append(
+                            CodeLine(line_data, line_count, pc_count))
+                        pc_count += 1
                 line_count += 1
             except AsmException as ex:
                 print("Asm exception in line: {0}".format(line_count))
@@ -145,16 +147,10 @@ def load_by_line(file_name, offset=0):
 
 def main():
     input_file = "test.txt"
+    verbose = True
     pp = pprint.PrettyPrinter(indent=2)
 
     load_by_line(input_file, addr_offset)
-
-    for code_line in code_line_list:
-        try:
-            code_line.parse_code(tag_pc_dict, data_offset_dict)
-        except AsmException as ex:
-            print("Asm parse exception in line: {0}".format(code_line.line_num))
-            raise ex
 
     if verbose:
         print("=====data_line_list=====")
@@ -166,7 +162,16 @@ def main():
         print("=====tag_pc_dict=====")
         pp.pprint(tag_pc_dict)
 
+    for code_line in code_line_list:
+        try:
+            code_line.parse_code(tag_pc_dict, data_offset_dict)
+        except AsmException as ex:
+            print("Asm parse exception in line: {0}".format(code_line.line_num))
+            raise ex
+
+    if verbose:
         for code_line in code_line_list:
+            print(code_line.opcode, ' '.join(code_line.operand))
             print(code_line.get_pretty_encode())
 
     if output_file:
