@@ -73,8 +73,6 @@ def parse_imm(input_str, data_dict=None):
         ret = imm_encode(input_str, 'int')
     elif check_bin(input_str):
         ret = imm_encode(input_str, 'bin')
-    elif check_num(input_str):
-        ret == imm_encode(input_str, 'num')
     return ret
 
 
@@ -82,6 +80,15 @@ def parse_j_imm(input_str, pc, tag_dict):
     ret = None
     if input_str in tag_dict:
         input_str = '{}'.format(pc - tag_dict[input_str])
+        ret = parse_imm(input_str)
+    return ret
+
+
+def parse_d_imm(input_str, dtype, fraction=None):
+    ret = None
+    if dtype:
+        ret = dtype_encode(input_str, dtype, fraction)
+    else:
         ret = parse_imm(input_str)
     return ret
 
@@ -510,7 +517,8 @@ def parse_111_1(imm, operand, data_dict=None):
     return ret
 
 
-def parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict):
+def parse_operand(op_type, imm, operand, pc, dtype,
+                  tag_pc_dict, data_offset_dict):
     ret = ['0'] * OPERAND_ENCODE_WIDTH
     if op_type == '000_0':
         ret = parse_000_0(operand, pc, tag_pc_dict)
@@ -559,7 +567,7 @@ def parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict):
     return ret
 
 
-def parse_code(opcode, operand, pc, tag_pc_dict, data_offset_dict):
+def parse_code(opcode, operand, pc, dtype, tag_pc_dict, data_offset_dict):
     ret = ['0'] * 64
     ret[-12:] = parse_opcode(opcode)
     op_type = opcode_encode_dict[opcode]['type']
@@ -569,5 +577,6 @@ def parse_code(opcode, operand, pc, tag_pc_dict, data_offset_dict):
         imm = imm or check_mem_data_name(operand[2])
         ret[-4] = str(int(imm))
     ret[2:-12] = \
-        parse_operand(op_type, imm, operand, pc, tag_pc_dict, data_offset_dict)
+        parse_operand(op_type, imm, operand, pc, dtype,
+                      tag_pc_dict, data_offset_dict)
     return ret

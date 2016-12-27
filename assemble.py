@@ -14,10 +14,11 @@ code_line_list = []
 tag_pc_dict = {}
 data_offset_dict = {}
 
-# data_list = []a
+# data_list = []
 
 addr_offset = 0
 type_list = ['word', 'half', 'byte']
+dtype_list = ['f', 'hb', 'b', 'h', 'w']
 
 
 def get_data_elem(line):
@@ -59,6 +60,14 @@ def get_code_elem(line):
     return opcode, operand
 
 
+def get_dtype_from_opcode(opcode):
+    ret = None
+    split = opcode.split('_')
+    if split[-1] in dtype_list:
+        ret = split[-1]
+    return ret
+
+
 class DataLine:
     def __init__(self, line, line_num, addr_offset):
         self.line = line
@@ -78,11 +87,12 @@ class CodeLine:
         self.line_num = line_num
         self.pc = pc
         self.opcode, self.operand = get_code_elem(line)
+        self.dtype = get_dtype_from_opcode(self.opcode)
         self.encode_list = None
 
     def __repr__(self):
-        return 'opcode: {0}, operand: {1} pc: {2}'.format(
-            self.opcode, self.operand, self.pc)
+        return 'opcode: {0}, operand: {1}, dtype: {2} pc: {3}'.format(
+            self.opcode, self.operand, self.dtype, self.pc)
 
     def get_encode(self):
         if self.encode_list:
@@ -103,7 +113,7 @@ class CodeLine:
 
     def parse_code(self, pc_dict, data_dict):
         self.encode_list = \
-            parse_code(self.opcode, self.operand, self.pc,
+            parse_code(self.opcode, self.operand, self.pc, self.dtype,
                        pc_dict, data_dict)
 
 

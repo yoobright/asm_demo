@@ -70,53 +70,58 @@ reg_encode_dict = dict(
 
 # aux reg
 # ==============================================================================
-aux_reg_encode_dict = {
+aux_reg_list = [
     # ID
-    'aux_identity': 0,
+    'aux_identity',
     # flow control
-    'aux_fetchpc': 1,
-    'aux_pause': 2,
-    'aux_run': 3,
-    'aux_stop': 4,
-    'aux_psw': 5,
+    'aux_fetchpc',
+    'aux_pause',
+    'aux_run',
+    'aux_stop',
+    'aux_psw',
     # Vector Move Control
-    'aux_mvvrow': 6,
-    'aux_mvvsridx': 7,
-    'aux_mvvscidx': 8,
-    'aux_mvvdridx': 9,
-    'aux_mvvdcidx': 10,
+    'aux_mvvrow',
+    'aux_mvvsridx',
+    'aux_mvvscidx',
+    'aux_mvvdridx',
+    'aux_mvvdcidx',
     # Vector Computation Control
-    'aux_vlen0': 12,
-    'aux_dwup': 13,
-    'aux_vlen1': 14,
-    'aux_vlen2': 15,
-    'aux_sldstrd1': 16,
-    'aux_sldstrd2': 17,
-    'aux_actln': 18,
-    'aux_actpe': 19,
+    'aux_vlen0',
+    'aux_dwup',
+    'aux_vlen1',
+    'aux_vlen2',
+    'aux_sldstrd1',
+    'aux_sldstrd2',
+    'aux_actln',
+    'aux_actpe',
     # Vector Load/Store Control
-    'aux_lsvlen': 20,
-    'aux_lsvln': 21,
-    'aux_lsvhv': 22,
-    'aux_lsvridx': 23,
-    'aux_lsvcidx': 24,
-    'aux_lsvstrd': 25,
-    'aux_lsvrow': 26,
-    'aux_lsvrowstrd': 27,
-    'aux_lsvpad': 28,
+    'aux_lsvlen',
+    'aux_lsvln',
+    'aux_lsvhv',
+    'aux_lsvridx',
+    'aux_lsvcidx',
+    'aux_lsvstrd',
+    'aux_lsvrow',
+    'aux_lsvrowstrd',
+    'aux_lsvpad',
     # Inter-Lane Transfer Control
-    'aux_ilvlnsrc': 29,
-    'aux_ilvpesrc': 30,
-    'aux_ilvlndst': 31,
-    'aux_ilvpedst': 32,
-    'aux_ilvlen': 33,
-    'aux_ilvpad': 34,
+    'aux_ilvlnsrc',
+    'aux_ilvpesrc',
+    'aux_ilvlndst',
+    'aux_ilvpedst',
+    'aux_ilvlen',
+    'aux_ilvpad',
     # Arithmetic Mode
-    'aux_fprnd': 35,
-    'aux_intrnd': 36,
-    'aux_intsat': 37,
-    'aux_intfxdp': 38
-}
+    'aux_fprnd',
+    'aux_intrnd',
+    'aux_intsat',
+    'aux_intfxdp'
+]
+
+aux_reg_encode_dict = {}
+
+for i in range(len(aux_reg_list)):
+    aux_reg_encode_dict[aux_reg_list[i]] = int2bin(i, 6)
 
 # opcode
 # ==============================================================================
