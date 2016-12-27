@@ -177,6 +177,7 @@ class BaseParser(object):
         self.code_line = code_line
         self.tag_pc_dict = tag_pc_dict
         self.data_offset_dict = data_offset_dict
+        self.fraction = None
 
     def parse_opcode(self):
         if self.code_line.opcode in opcode_encode_dict:
@@ -187,6 +188,21 @@ class BaseParser(object):
             raise AsmException('opcode parse error')
 
     def parse_operand(self):
+        ret = None
+        encode_list = self._operand_encode()
+        none_index = encode_list.index(None)
+        if none_index:
+            print("can not parse operand: {0}".format(
+                self.code_line.operand[0]))
+            raise AsmException("operand parse error")
+        else:
+            ret = self._set_operand(encode_list)
+        return ret
+
+    def _operand_encode(self):
+        raise NotImplementedError
+
+    def _set_operand(self, encode_list):
         raise NotImplementedError
 
     def preprocess(self):
@@ -200,93 +216,190 @@ class BaseParser(object):
         return ret
 
 
-
 class Parser_000_0(BaseParser):
-    def parse_operand(self):
-        pass
+    def _operand_encode(self):
+        encode0 = None
+        encode1 = None
+        encode2 = None
+        if len(self.code_line.operand) >= 3:
+            encode0 = parse_reg(self.code_line.operand[0], ['sr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['sr'])
+            encode2 = parse_j_imm(self.code_line.operand[2], self.code_line.pc,
+                                  self.tag_pc_dict)
+        return [encode0, encode1, encode2]
+
+    def _set_operand(self, encode_list):
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        set_imm(ret, encode_list[2])
+        return ret
+
 
 class Parser_000_1(BaseParser):
-    def parse_opeand(self):
+    def _operand_encode(self):
+        pass
+
+    def _set_operand(self, encode_list):
         pass
 
 class Parser_000_2(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_000_3(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_000_4(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_001_0(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_001_1(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_010_0(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_011_0(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_100_0(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_100_1(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_100_2(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_101_0(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_101_1(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_101_2(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_101_3(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_101_4(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_110_0(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_110_1(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_110_2(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
+
+    def _set_operand(self, encode_list):
+        pass
+
 
 class Parser_111_0(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
         pass
 
+    def _set_operand(self, encode_list):
+        pass
+
+
 class Parser_111_1(BaseParser):
-    def parse_operand(self):
+    def _operand_encode(self):
+        pass
+
+    def _set_operand(self, encode_list):
         pass
 
 
