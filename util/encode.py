@@ -3,6 +3,7 @@ import re
 import sys
 import numpy as np
 from exception import AsmException
+from deModel import DeFixedInt
 
 
 def is_string(s):
@@ -92,6 +93,38 @@ def single2bin(input_num, truncate=32):
     if is_string(input_num):
         input_num = eval(input_num)
     ret = np.binary_repr(np.float32(input_num).view(np.int32), truncate)
+    return ret
+
+
+def fix322bin(input_num, fraction):
+    if is_string(input_num):
+        input_num = eval(input_num)
+    int_w = 32 - fraction - 1
+    ret = DeFixedInt(int_w, fraction).bit()
+    return ret
+
+
+def fix162bin(input_num, fraction):
+    if is_string(input_num):
+        input_num = eval(input_num)
+    int_w = 16 - fraction - 1
+    ret = DeFixedInt(int_w, fraction).bit()
+    return ret
+
+
+def fix82bin(input_num, fraction):
+    if is_string(input_num):
+        input_num = eval(input_num)
+    int_w = 8 - fraction - 1
+    ret = DeFixedInt(int_w, fraction).bit()
+    return ret
+
+
+def fix42bin(input_num, fraction):
+    if is_string(input_num):
+        input_num = eval(input_num)
+    int_w = 4 - fraction - 1
+    ret = DeFixedInt(int_w, fraction).bit()
     return ret
 
 
