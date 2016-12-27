@@ -117,6 +117,179 @@ def parse_reg_imm(imm, data_dict, input_str, reg_type_list):
         return parse_reg(input_str, reg_type_list)
 
 
+class Factory(object):
+    @staticmethod
+    def get_parser(opcode):
+        op_type = opcode_encode_dict[opcode]['type']
+        if op_type == '000_0':
+            return Parser_000_0
+        elif op_type == '000_1':
+            return Parser_000_1
+        elif op_type == '000_2':
+            return Parser_000_2
+        elif op_type == '000_3':
+            return Parser_000_3
+        elif op_type == '000_4':
+            return Parser_000_4
+        elif op_type == '001_0':
+            return Parser_001_0
+        elif op_type == '001_1':
+            return Parser_001_1
+        elif op_type == '010_0':
+            return Parser_010_0
+        elif op_type == '011_0':
+            return Parser_011_0
+        elif op_type == '100_0':
+            return Parser_100_0
+        elif op_type == '100_1':
+            return Parser_100_1
+        elif op_type == '100_2':
+            return Parser_100_2
+        elif op_type == '101_0':
+            return Parser_101_0
+        elif op_type == '101_1':
+            return Parser_101_1
+        elif op_type == '101_2':
+            return Parser_101_2
+        elif op_type == '101_3':
+            return Parser_101_3
+        elif op_type == '101_4':
+            return Parser_101_4
+        elif op_type == '110_0':
+            return Parser_110_0
+        elif op_type == '110_1':
+            return Parser_110_1
+        elif op_type == '110_2':
+            return Parser_110_2
+        elif op_type == '111_0':
+            return Parser_111_0
+        elif op_type == '111_1':
+            return Parser_111_1
+
+
+class BaseParser(object):
+    def __init__(self, code_line, tag_pc_dict, data_offset_dict):
+        """
+        :type code_line: CodeLine
+        :type tag_pc_dict: dict
+        :type data_offset_dict: dict
+        """
+        self.code_line = code_line
+        self.tag_pc_dict = tag_pc_dict
+        self.data_offset_dict = data_offset_dict
+
+    def parse_opcode(self):
+        if self.code_line.opcode in opcode_encode_dict:
+            meta = opcode_encode_dict[self.code_line.opcode]
+            return meta['function'] + meta['imm'] + meta['group']
+        else:
+            print("'{}' is not a valid opcode".format(self.code_line.opcode))
+            raise AsmException('opcode parse error')
+
+    def parse_operand(self):
+        raise NotImplementedError
+
+    def preprocess(self):
+        pass
+
+    def parse_code(self):
+        ret = ['0'] * 64
+        self.preprocess()
+        ret[-12:] = self.parse_opcode()
+        ret[2:-12] = self.parse_operand()
+        return ret
+
+
+
+class Parser_000_0(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_000_1(BaseParser):
+    def parse_opeand(self):
+        pass
+
+class Parser_000_2(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_000_3(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_000_4(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_001_0(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_001_1(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_010_0(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_011_0(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_100_0(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_100_1(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_100_2(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_101_0(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_101_1(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_101_2(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_101_3(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_101_4(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_110_0(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_110_1(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_110_2(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_111_0(BaseParser):
+    def parse_operand(self):
+        pass
+
+class Parser_111_1(BaseParser):
+    def parse_operand(self):
+        pass
+
+
 def parse_opcode(opcode):
     if opcode in opcode_encode_dict:
         meta = opcode_encode_dict[opcode]
