@@ -27,7 +27,7 @@ def decode_opcode(input_str):
     return ret
 
 
-def decode_all_reg(input_str):
+def decode_3_reg(input_str):
     d_bits = input_str[0:6]
     a_bits = input_str[6:12]
     b_bits = input_str[12:]
@@ -37,6 +37,30 @@ def decode_all_reg(input_str):
     b_decode = decode_reg(b_bits)
 
     decode_list = filter(lambda x: x, [d_decode, a_decode, b_decode])
+    ret = ' '.join(decode_list).strip()
+
+    return ret
+
+
+def decode_2_reg(input_str):
+    d_bits = input_str[0:6]
+    a_bits = input_str[6:12]
+
+    d_decode = decode_reg(d_bits)
+    a_decode = decode_reg(a_bits)
+
+    decode_list = filter(lambda x: x, [d_decode, a_decode])
+    ret = ' '.join(decode_list).strip()
+
+    return ret
+
+
+def decode_1_reg(input_str):
+    d_bits = input_str[0:6]
+
+    d_decode = decode_reg(d_bits)
+
+    decode_list = filter(lambda x: x, [d_decode])
     ret = ' '.join(decode_list).strip()
 
     return ret
