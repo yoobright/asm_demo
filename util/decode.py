@@ -20,7 +20,6 @@ def decode_aux_reg(input_str):
 
 def decode_opcode(input_str):
     ret = None
-    print(input_str)
     if input_str in opcode_decode_dict:
         ret = opcode_decode_dict[input_str]['opcode']
     return ret
@@ -28,7 +27,6 @@ def decode_opcode(input_str):
 
 def decode_operand_num(input_str):
     ret = None
-    print(input_str)
     if input_str in opcode_decode_dict:
         ret = opcode_decode_dict[input_str]['operand_num']
     return ret

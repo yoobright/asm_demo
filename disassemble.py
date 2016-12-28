@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from util.decode import *
+from util.exception import DasmException
+import re
 
 
 def get_operand_imm_bits(input_str):
@@ -22,7 +24,16 @@ def get_group_bits(input_str):
     return input_str[61:]
 
 
+def check_input_str(input_str):
+    p = re.compile(r'[01]{64}')
+    match = p.match(input_str)
+    if not match:
+        raise DasmException('input string is not valid')
+
+
 def disassemble(input_str):
+    input_str = input_str.replace('_', '')
+    check_input_str(input_str)
     ret = None
     opcode = ''
     operand_imm = ''
@@ -63,7 +74,7 @@ def disassemble(input_str):
                 operand_reg = decode_1_reg(operand_reg_bits)
             elif operand_reg == 0:
                 pass
-    op_list = filter(lambda x: x!= '', [opcode, operand_reg, operand_imm])
+    op_list = filter(lambda x: x != '', [opcode, operand_reg, operand_imm])
     ret = ' '.join(op_list)
     return ret
 

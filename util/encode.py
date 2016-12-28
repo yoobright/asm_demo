@@ -23,7 +23,7 @@ def check_hex(check_input):
 
 
 def check_int(check_input):
-    int_pattern = re.compile(r'-*[0-9]+$')
+    int_pattern = re.compile(r'[-+]?[0-9]+$')
     match = int_pattern.match(str(check_input))
     if match:
         return True
