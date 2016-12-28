@@ -7,7 +7,7 @@ import re
 
 from util.encode_dict import opcode_encode_dict
 from util.exception import *
-from util.parse import parse_code
+from util.parse import Factory
 
 data_line_list = []
 code_line_list = []
@@ -111,10 +111,10 @@ class CodeLine:
             ret.insert(68, '_')
             return ''.join(ret)
 
-    def parse_code(self, pc_dict, data_dict):
-        self.encode_list = \
-            parse_code(self.opcode, self.operand, self.pc, self.dtype,
-                       pc_dict, data_dict)
+    # def parse_code(self, pc_dict, data_dict):
+    #     self.encode_list = \
+    #         parse_code(self.opcode, self.operand, self.pc, self.dtype,
+    #                    pc_dict, data_dict)
 
 
 def load_by_line(file_name, offset=0):
@@ -176,7 +176,10 @@ def main():
 
     for code_line in code_line_list:
         try:
-            code_line.parse_code(tag_pc_dict, data_offset_dict)
+            # code_line.parse_code(tag_pc_dict, data_offset_dict)
+            code_parser = Factory.get_parser(code_line.opcode)
+            code_line.encode_list = code_parser(code_line, tag_pc_dict,
+                                                data_offset_dict).parse_code()
         except AsmException as ex:
             print("Asm parse exception in line: {0}".format(code_line.line_num))
             raise ex

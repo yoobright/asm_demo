@@ -177,6 +177,7 @@ class BaseParser(object):
         self.code_line = code_line
         self.tag_pc_dict = tag_pc_dict
         self.data_offset_dict = data_offset_dict
+        self.imm = bool(int(opcode_encode_dict[code_line.opcode]['imm']))
         self.fraction = None
 
     def parse_opcode(self):
@@ -190,10 +191,10 @@ class BaseParser(object):
     def parse_operand(self):
         ret = None
         encode_list = self._operand_encode()
-        none_index = encode_list.index(None)
-        if none_index:
+        if None in encode_list:
+            none_index = encode_list.index(None)
             print("can not parse operand: {0}".format(
-                self.code_line.operand[0]))
+                self.code_line.operand[none_index]))
             raise AsmException("operand parse error")
         else:
             ret = self._set_operand(encode_list)
@@ -274,7 +275,7 @@ class Parser_000_3(BaseParser):
         if len(self.code_line.operand) >= 3:
             encode0 = parse_reg(self.code_line.operand[0], ['sr'])
             encode1 = parse_reg(self.code_line.operand[1], ['sr'])
-            encode2 = parse_reg_imm(self.code_line.imm,
+            encode2 = parse_reg_imm(self.imm,
                                     self.data_offset_dict,
                                     self.code_line.operand[2], ['sr'])
         return [encode0, encode1, encode2]
@@ -283,7 +284,7 @@ class Parser_000_3(BaseParser):
         ret = ['0'] * OPERAND_ENCODE_WIDTH
         set_d(ret, encode_list[0])
         set_a(ret,  encode_list[0])
-        set_b_imm(self.code_line.imm, ret,  encode_list[0])
+        set_b_imm(self.imm, ret,  encode_list[0])
         return ret
 
 
@@ -310,7 +311,7 @@ class Parser_001_0(BaseParser):
         encode1 = None
         if len(self.code_line.operand) >= 2:
             encode0 = parse_aux_reg(self.code_line.operand[0])
-            encode1 = parse_reg_imm(self.code_line.imm,
+            encode1 = parse_reg_imm(self.imm,
                                     self.data_offset_dict,
                                     self.code_line.operand[1], ['sr'])
         return [encode0, encode1]
@@ -318,7 +319,7 @@ class Parser_001_0(BaseParser):
     def _set_operand(self, encode_list):
         ret = ['0'] * OPERAND_ENCODE_WIDTH
         set_d(ret, encode_list[0])
-        set_a_imm(self.code_line.imm, ret, encode_list[1])
+        set_a_imm(self.imm, ret, encode_list[1])
         return ret
 
 
@@ -346,7 +347,7 @@ class Parser_010_0(BaseParser):
         if len(self.code_line.operand) >= 3:
             encode0 = parse_reg(self.code_line.operand[0], ['vr', 'vs', 'pr'])
             encode1 = parse_reg(self.code_line.operand[1], ['sr'])
-            encode2 = parse_reg_imm(self.code_line.imm,
+            encode2 = parse_reg_imm(self.imm,
                                     self.data_offset_dict,
                                     self.code_line.operand[2], ['sr'])
         return [encode0, encode1, encode2]
@@ -355,8 +356,13 @@ class Parser_010_0(BaseParser):
         ret = ['0'] * OPERAND_ENCODE_WIDTH
         set_d(ret, encode_list[0])
         set_a(ret, encode_list[1])
-        set_b_imm(self.code_line.imm, ret, encode_list[2])
+        set_b_imm(self.imm, ret, encode_list[2])
         return ret
+
+    def preprocess(self):
+        if check_mem_data_name(self.code_line.operand[2]):
+            self.imm = True
+
 
 
 class Parser_011_0(BaseParser):
@@ -387,7 +393,7 @@ class Parser_100_0(BaseParser):
             if self.code_line.operand[0] == 'pr':
                 a_encode_list.remove('vs')
             encode0 = parse_reg(self.code_line.operand[0], ['vr', 'vs', 'pr'])
-            encode1 = parse_reg_imm(self.code_line.imm,
+            encode1 = parse_reg_imm(self.imm,
                                     self.data_offset_dict,
                                     self.code_line.operand[1],
                                     a_encode_list)
@@ -396,7 +402,7 @@ class Parser_100_0(BaseParser):
     def _set_operand(self, encode_list):
         ret = ['0'] * OPERAND_ENCODE_WIDTH
         set_d(ret, encode_list[0])
-        set_a_imm(self.code_line.imm, ret, encode_list[1])
+        set_a_imm(self.imm, ret, encode_list[1])
         return ret
 
 
@@ -440,7 +446,7 @@ class Parser_101_0(BaseParser):
         if len(self.code_line.operand) >= 3:
             encode0 = parse_reg(self.code_line.operand[0], ['vr'])
             encode1 = parse_reg(self.code_line.operand[1], ['vr'])
-            encode2 = parse_reg_imm(self.code_line.imm,
+            encode2 = parse_reg_imm(self.imm,
                                     self.data_offset_dict,
                                     self.code_line.operand[2],
                                     ['vr', 'sr'])
@@ -450,7 +456,7 @@ class Parser_101_0(BaseParser):
         ret = ['0'] * OPERAND_ENCODE_WIDTH
         set_d(ret, encode_list[0])
         set_a(ret, encode_list[1])
-        set_b_imm(self.code_line.imm, ret, encode_list[2])
+        set_b_imm(self.imm, ret, encode_list[2])
         return ret
 
 
@@ -478,7 +484,7 @@ class Parser_101_2(BaseParser):
         if len(self.code_line.operand) >= 3:
             encode0 = parse_reg(self.code_line.operand[0], ['vr'])
             encode1 = parse_reg(self.code_line.operand[1], ['vr'])
-            encode2 = parse_reg_imm(self.code_line.imm,
+            encode2 = parse_reg_imm(self.imm,
                                     self.data_offset_dict,
                                     self.code_line.operand[2],
                                     ['sr'])
@@ -488,7 +494,7 @@ class Parser_101_2(BaseParser):
         ret = ['0'] * OPERAND_ENCODE_WIDTH
         set_d(ret, encode_list[0])
         set_a(ret, encode_list[1])
-        set_b_imm(self.code_line.imm, ret, encode_list[2])
+        set_b_imm(self.imm, ret, encode_list[2])
         return ret
 
 
@@ -589,7 +595,7 @@ class Parser_111_0(BaseParser):
         if len(self.code_line.operand) >= 3:
             encode0 = parse_reg(self.code_line.operand[0], ['vr'])
             encode1 = parse_reg(self.code_line.operand[1], ['vr'])
-            encode2 = parse_reg_imm(self.code_line.imm,
+            encode2 = parse_reg_imm(self.imm,
                                     self.data_offset_dict,
                                     self.code_line.operand[2],
                                     ['vr', 'sr'])
@@ -599,7 +605,7 @@ class Parser_111_0(BaseParser):
         ret = ['0'] * OPERAND_ENCODE_WIDTH
         set_d(ret, encode_list[0])
         set_a(ret, encode_list[1])
-        set_b_imm(self.code_line.imm, ret, encode_list[1])
+        set_b_imm(self.imm, ret, encode_list[1])
         return ret
 
 
@@ -611,7 +617,7 @@ class Parser_111_1(BaseParser):
         if len(self.code_line.operand) >= 3:
             encode0 = parse_reg(self.code_line.operand[0], ['vr'])
             encode1 = parse_reg(self.code_line.operand[1], ['vr'])
-            encode2 = parse_reg_imm(self.code_line.imm,
+            encode2 = parse_reg_imm(self.imm,
                                     self.data_offset_dict,
                                     self.code_line.operand[2],
                                     ['sr'])
@@ -621,7 +627,7 @@ class Parser_111_1(BaseParser):
         ret = ['0'] * OPERAND_ENCODE_WIDTH
         set_d(ret, encode_list[0])
         set_a(ret, encode_list[1])
-        set_b_imm(self.code_line.imm, ret, encode_list[2])
+        set_b_imm(self.imm, ret, encode_list[2])
         return ret
 
 
