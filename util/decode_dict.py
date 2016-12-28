@@ -4,6 +4,7 @@ from encode_dict import reg_encode_dict
 from encode_dict import aux_reg_encode_dict
 from encode_dict import opcode_encode_dict
 
+
 reg_decode_dict = {}
 for key, value in reg_encode_dict.items():
     reg_decode_dict[value] = key
@@ -17,7 +18,10 @@ for key, value in opcode_encode_dict.items():
     fun_imm_group_pair = opcode_encode_dict[key]['function'] + '_' + \
         opcode_encode_dict[key]['imm'] + '_' + \
         opcode_encode_dict[key]['group']
-    opcode_decode_dict[fun_imm_group_pair] = key
+    opcode_decode_dict[fun_imm_group_pair] = {
+        'opcode': key,
+        'operand_num': opcode_encode_dict[key]['operand_num']
+    }
 
 
 if __name__ == '__main__':
