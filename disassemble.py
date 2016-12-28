@@ -74,6 +74,8 @@ def disassemble(input_str):
                 operand_reg = decode_1_reg(operand_reg_bits)
             elif operand_reg == 0:
                 pass
+    if not opcode:
+        raise DasmException('can not disassemble opcode')
     op_list = filter(lambda x: x != '', [opcode, operand_reg, operand_imm])
     ret = ' '.join(op_list)
     return ret
