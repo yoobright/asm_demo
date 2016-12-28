@@ -119,7 +119,7 @@ class CodeLine:
 
 def load_by_line(file_name, offset=0):
     with open(file_name, 'r') as f:
-        print("load file ...")
+        print("load file: {0} ...".format(f.name))
         state = None
         line_count = 1
         pc_count = 0
@@ -158,8 +158,6 @@ def load_by_line(file_name, offset=0):
 
 
 def main():
-    input_file = "test.txt"
-    verbose = True
     pp = pprint.PrettyPrinter(indent=2)
 
     load_by_line(input_file, addr_offset)
