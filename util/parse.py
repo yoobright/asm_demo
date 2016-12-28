@@ -238,169 +238,391 @@ class Parser_000_0(BaseParser):
 
 class Parser_000_1(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        encode2 = None
+        if len(self.code_line.operand) >= 3:
+            encode0 = parse_reg(self.code_line.operand[0], ['sr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['sr'])
+            encode2 = parse_j_imm(self.code_line.operand[2],
+                                  self.code_line.pc,
+                                  self.code_line.tag_pc_dict)
+        return [encode0, encode1, encode2]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        set_imm(ret, encode_list[2])
+        return ret
+
 
 class Parser_000_2(BaseParser):
     def _operand_encode(self):
-        pass
+        return [0]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        return ret
 
 
 class Parser_000_3(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        encode2 = None
+        if len(self.code_line.operand) >= 3:
+            encode0 = parse_reg(self.code_line.operand[0], ['sr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['sr'])
+            encode2 = parse_reg_imm(self.code_line.imm,
+                                    self.data_offset_dict,
+                                    self.code_line.operand[2], ['sr'])
+        return [encode0, encode1, encode2]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret,  encode_list[0])
+        set_b_imm(self.code_line.imm, ret,  encode_list[0])
+        return ret
 
 
 class Parser_000_4(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        if len(self.code_line.operand) >= 2:
+            encode0 = parse_reg(self.code_line.operand[0], ['sr'])
+            encode1 = parse_imm(self.code_line.operand[1],
+                                self.data_offset_dict)
+        return [encode0, encode1]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_imm(ret, encode_list[1])
+        return ret
 
 
 class Parser_001_0(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        if len(self.code_line.operand) >= 2:
+            encode0 = parse_aux_reg(self.code_line.operand[0])
+            encode1 = parse_reg_imm(self.code_line.imm,
+                                    self.data_offset_dict,
+                                    self.code_line.operand[1], ['sr'])
+        return [encode0, encode1]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a_imm(self.code_line.imm, ret, encode_list[1])
+        return ret
 
 
 class Parser_001_1(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        if len(self.code_line.operand) >= 2:
+            encode0 = parse_reg(self.code_line.operand[0], ['sr'])
+            encode1 = parse_aux_reg(self.code_line.operand[1])
+        return [encode0, encode1]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_imm(ret, encode_list[1])
+        return ret
 
 
 class Parser_010_0(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        encode2 = None
+        if len(self.code_line.operand) >= 3:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr', 'vs', 'pr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['sr'])
+            encode2 = parse_reg_imm(self.code_line.imm,
+                                    self.data_offset_dict,
+                                    self.code_line.operand[2], ['sr'])
+        return [encode0, encode1, encode2]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        set_b_imm(self.code_line.imm, ret, encode_list[2])
+        return ret
 
 
 class Parser_011_0(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        encode2 = None
+        if len(self.code_line.operand) >= 3:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['sr'])
+            encode2 = parse_reg(self.code_line.operand[2], ['sr'])
+        return [encode0, encode1, encode2]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[0])
+        set_b(ret, encode_list[0])
+        return ret
 
 
 class Parser_100_0(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        if len(self.code_line.operand) >= 2:
+            a_encode_list = ['vr', 'vs', 'sr']
+            if self.code_line.operand[0] == 'pr':
+                a_encode_list.remove('vs')
+            encode0 = parse_reg(self.code_line.operand[0], ['vr', 'vs', 'pr'])
+            encode1 = parse_reg_imm(self.code_line.imm,
+                                    self.data_offset_dict,
+                                    self.code_line.operand[1],
+                                    a_encode_list)
+        return [encode0, encode1]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a_imm(self.code_line.imm, ret, encode_list[1])
+        return ret
 
 
 class Parser_100_1(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        if len(self.code_line.operand) >= 2:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr', 'pr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['vr', 'vs'])
+        return [encode0, encode1]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        return ret
 
 
 class Parser_100_2(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        if len(self.code_line.operand) >= 2:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr', 'vs'])
+            encode1 = parse_reg(self.code_line.operand[1], ['vr', 'pr'])
+        return [encode0, encode1]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        return ret
 
 
 class Parser_101_0(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        encode2 = None
+        if len(self.code_line.operand) >= 3:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['vr'])
+            encode2 = parse_reg_imm(self.code_line.imm,
+                                    self.data_offset_dict,
+                                    self.code_line.operand[2],
+                                    ['vr', 'sr'])
+        return [encode0, encode1, encode2]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        set_b_imm(self.code_line.imm, ret, encode_list[2])
+        return ret
 
 
 class Parser_101_1(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        if len(self.code_line.operand) >= 2:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr', 'pr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['vr'])
+        return [encode0, encode1]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        return ret
 
 
 class Parser_101_2(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        encode2 = None
+        if len(self.code_line.operand) >= 3:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['vr'])
+            encode2 = parse_reg_imm(self.code_line.imm,
+                                    self.data_offset_dict,
+                                    self.code_line.operand[2],
+                                    ['sr'])
+        return [encode0, encode1, encode2]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        set_b_imm(self.code_line.imm, ret, encode_list[2])
+        return ret
 
 
 class Parser_101_3(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        encode2 = None
+        if len(self.code_line.operand) >= 3:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr', 'pr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['vr'])
+            encode2 = parse_reg(self.code_line.operand[2], ['vr', 'vs'])
+        return [encode0, encode1, encode2]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        set_b(ret, encode_list[2])
+        return ret
 
 
 class Parser_101_4(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        if len(self.code_line.operand) >= 2:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['vr'])
+        return [encode0, encode1]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        return ret
 
 
 class Parser_110_0(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        encode2 = None
+        if len(self.code_line.operand) >= 3:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['vr'])
+            encode2 = parse_reg(self.code_line.operand[2], ['vr', 'vs'])
+        return [encode0, encode1, encode2]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        set_b(ret, encode_list[2])
+        return ret
 
 
 class Parser_110_1(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        encode2 = None
+        if len(self.code_line.operand) >= 3:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['vr'])
+            encode2 = parse_reg(self.code_line.operand[2], ['vs'])
+        return [encode0, encode1, encode2]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        set_b(ret, encode_list[2])
+        return ret
 
 
 class Parser_110_2(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        if len(self.code_line.operand) >= 2:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['vr'])
+        return [encode0, encode1]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        return ret
 
 
 class Parser_111_0(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        encode2 = None
+        if len(self.code_line.operand) >= 3:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['vr'])
+            encode2 = parse_reg_imm(self.code_line.imm,
+                                    self.data_offset_dict,
+                                    self.code_line.operand[2],
+                                    ['vr', 'sr'])
+        return [encode0, encode1, encode2]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        set_b_imm(self.code_line.imm, ret, encode_list[1])
+        return ret
 
 
 class Parser_111_1(BaseParser):
     def _operand_encode(self):
-        pass
+        encode0 = None
+        encode1 = None
+        encode2 = None
+        if len(self.code_line.operand) >= 3:
+            encode0 = parse_reg(self.code_line.operand[0], ['vr'])
+            encode1 = parse_reg(self.code_line.operand[1], ['vr'])
+            encode2 = parse_reg_imm(self.code_line.imm,
+                                    self.data_offset_dict,
+                                    self.code_line.operand[2],
+                                    ['sr'])
+        return [encode0, encode1, encode2]
 
     def _set_operand(self, encode_list):
-        pass
+        ret = ['0'] * OPERAND_ENCODE_WIDTH
+        set_d(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        set_b_imm(self.code_line.imm, ret, encode_list[2])
+        return ret
 
 
 def parse_opcode(opcode):
