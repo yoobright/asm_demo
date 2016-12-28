@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import argparse
+import re
 from util.decode import *
 from util.exception import DasmException
-import re
 
+code_list = []
 
 def get_operand_imm_bits(input_str):
     return input_str[2:34]
@@ -59,7 +61,7 @@ def disassemble(input_str):
         else:
             if operand_num == 3:
                 operand_reg = decode_2_reg(operand_reg_bits)
-            elif operand_reg == 2:
+            elif operand_num == 2:
                 operand_reg = decode_1_reg(operand_reg_bits)
     else:
         if opcode == 's_waux':
@@ -81,7 +83,34 @@ def disassemble(input_str):
     return ret
 
 
+def main():
+    input_file = "test\\dtest.txt"
+    verbose = True
+    if input_file:
+        with open(input_file, 'r') as in_f:
+            for file_line in in_f.readlines():
+                code = disassemble(file_line.strip())
+                if code:
+                    code_list.append(code)
+
+    if verbose:
+        for code in code_list:
+            print(code)
+
 
 
 if __name__ == '__main__':
-    pass
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input', type=str, default=None,
+                        help="input file name")
+    parser.add_argument('-o', '--output', type=str, default=None,
+                        help="output file name")
+    parser.add_argument("-v", '--verbose', action="store_true",
+                        help="increase output verbosity")
+    args = parser.parse_args()
+
+    input_file = args.input
+    output_file = args.output
+    verbose = args.verbose
+
+    main()

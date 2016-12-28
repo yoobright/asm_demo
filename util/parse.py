@@ -289,8 +289,8 @@ class Parser_000_3(BaseParser):
     def _set_operand(self, encode_list):
         ret = ['0'] * OPERAND_ENCODE_WIDTH
         set_d(ret, encode_list[0])
-        set_a(ret,  encode_list[0])
-        set_b_imm(self.imm, ret,  encode_list[0])
+        set_a(ret,  encode_list[1])
+        set_b_imm(self.imm, ret,  encode_list[2])
         return ret
 
     def preprocess(self):
@@ -390,8 +390,8 @@ class Parser_011_0(BaseParser):
     def _set_operand(self, encode_list):
         ret = ['0'] * OPERAND_ENCODE_WIDTH
         set_d(ret, encode_list[0])
-        set_a(ret, encode_list[0])
-        set_b(ret, encode_list[0])
+        set_a(ret, encode_list[1])
+        set_b(ret, encode_list[2])
         return ret
 
 
@@ -638,7 +638,7 @@ class Parser_111_0(BaseParser):
         ret = ['0'] * OPERAND_ENCODE_WIDTH
         set_d(ret, encode_list[0])
         set_a(ret, encode_list[1])
-        set_b_imm(self.imm, ret, encode_list[1])
+        set_b_imm(self.imm, ret, encode_list[2])
         return ret
 
 

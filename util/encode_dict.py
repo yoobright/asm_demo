@@ -251,7 +251,7 @@ for i in ['_b', '_h', '_w']:
 
 # group 100
 group = '100'
-operand_num = 3
+operand_num = 2
 for i in ['_f', '_hb', '_b', '_h', '_w']:
     opcode_encode_dict['v_mov' + i] = \
         set_meta(set_func_opcode(0, i), '0', group, '0', operand_num)
