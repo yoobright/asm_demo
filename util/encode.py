@@ -99,6 +99,8 @@ def single2bin(input_num, truncate=32):
 def fix322bin(input_num, fraction=16):
     if is_string(input_num):
         input_num = eval(input_num)
+    if fraction > 31:
+        raise AsmException('fraction out of range')
     int_w = 32 - fraction - 1
     ret = DeFixedInt(int_w, fraction, input_num).bit()
     return ret
@@ -107,6 +109,8 @@ def fix322bin(input_num, fraction=16):
 def fix162bin(input_num, fraction=8):
     if is_string(input_num):
         input_num = eval(input_num)
+    if fraction > 15:
+        raise AsmException('fraction out of range')
     int_w = 16 - fraction - 1
     ret = DeFixedInt(int_w, fraction, input_num).bit()
     return ret
@@ -115,6 +119,8 @@ def fix162bin(input_num, fraction=8):
 def fix82bin(input_num, fraction=4):
     if is_string(input_num):
         input_num = eval(input_num)
+    if fraction > 7:
+        raise AsmException('fraction out of range')
     int_w = 8 - fraction - 1
     ret = DeFixedInt(int_w, fraction, input_num).bit()
     return ret
@@ -123,6 +129,8 @@ def fix82bin(input_num, fraction=4):
 def fix42bin(input_num, fraction=2):
     if is_string(input_num):
         input_num = eval(input_num)
+    if fraction > 3:
+        raise AsmException('fraction out of range')
     int_w = 4 - fraction - 1
     ret = DeFixedInt(int_w, fraction, input_num).bit()
     return ret

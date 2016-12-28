@@ -6,6 +6,12 @@ from util.encode_dict import *
 
 OPERAND_ENCODE_WIDTH = 50
 
+"""
+preprocess:
+000_3, 010_0: for load mem data addr
+101_0: for multi-type imm
+"""
+
 
 def set_imm(input_list, encode):
     if len(input_list) == OPERAND_ENCODE_WIDTH:
@@ -247,7 +253,7 @@ class Parser_000_1(BaseParser):
             encode1 = parse_reg(self.code_line.operand[1], ['sr'])
             encode2 = parse_j_imm(self.code_line.operand[2],
                                   self.code_line.pc,
-                                  self.code_line.tag_pc_dict)
+                                  self.tag_pc_dict)
         return [encode0, encode1, encode2]
 
     def _set_operand(self, encode_list):
@@ -286,6 +292,11 @@ class Parser_000_3(BaseParser):
         set_a(ret,  encode_list[0])
         set_b_imm(self.imm, ret,  encode_list[0])
         return ret
+
+    def preprocess(self):
+        if check_mem_data_name(self.code_line.operand[2]):
+            self.imm = True
+
 
 
 class Parser_000_4(BaseParser):
@@ -458,6 +469,27 @@ class Parser_101_0(BaseParser):
         set_a(ret, encode_list[1])
         set_b_imm(self.imm, ret, encode_list[2])
         return ret
+
+    def preprocess(self):
+        if self.imm:
+            if len(self.code_line.operand) >= 4:
+                self.fraction = \
+                    int(self.code_line.operand[3].split('=')[-1].strip())
+            if self.code_line.dtype == 'f':
+                self.code_line.operand[2] = '0b' + \
+                    single2bin(self.code_line.operand[2])
+            elif self.code_line.dtype == 'w':
+                self.code_line.operand[2] = '0b' + \
+                    fix322bin(self.code_line.operand[2], self.fraction)
+            elif self.code_line.dtype == 'h':
+                self.code_line.operand[2] = '0b' + \
+                    fix162bin(self.code_line.operand[2], self.fraction)
+            elif self.code_line.dtype == 'b':
+                self.code_line.operand[2] = '0b' + \
+                    fix82bin(self.code_line.operand[2], self.fraction)
+            elif self.code_line.dtype == 'hb':
+                self.code_line.operand[2] = '0b' + \
+                    fix42bin(self.code_line.operand[2], self.fraction)
 
 
 class Parser_101_1(BaseParser):

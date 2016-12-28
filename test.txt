@@ -21,82 +21,203 @@ __DATA
 
 
 __CODE
-	;import_mem ./lenet_fixed8/fc4_mem_data_out.txt
-	s_wauxi [AUX_ACTLN], 0		;;Vector�������ø����Ĵ���		Indicate which Lane will be activated.
+	;import_mem ./lenet_fixed8/conv2_mem_data_out.txt
+	s_wauxi [AUX_LSVLN], 0		;load���ݽ�VR	Lane��Ϊ0	Indicate the Lane index to be loaded or stored in vector load/store instructions is 0	�ܷ�֧�����������˴���֧������������
+	s_wauxi [AUX_LSVHV], 0		;load data horizontally	indicate the data will be transferred horizontally into Lane SRAM array
+	s_wauxi [AUX_LSVSTRD], 0	;address stride 0	indicate the address stride (of elements number) between each element in memory for vector load/store instructions
+	s_wauxi [AUX_LSVROWSTRD], 0	;row stride 0	indicates The stride between each row or each column in memory space
+
+	s_wauxi [AUX_ACTLN], 0		;Vector�������ø����Ĵ���		Indicate which Lane will be activated.
 	s_wauxi [AUX_INTRND], 0		;���㻰����	round mode	Indicate the rounding mode if the element is fixed-point.
+	s_wauxi [AUX_INTSAT], 0		;saturate mode	Indicate saturation mode
 	s_wauxi [AUX_INTFXDP], 4	;truncate 4	Indicate the truncate position for the least significant bits of fixed-point result
-	s_wauxi [AUX_INTSAT], 0		;saturate mode	Indicate saturation mode.
-
-	;===========4��ͼ����һ��load======
-	;s_wauxi [AUX_ACTTASK],0b1111	;����Ŀ�����ݵ���������Լ����������Ϊ4��byte	indicates The stride between each element in VR/VS
-
-	s_wauxi [AUX_LSVLN], 0		;Load input��VS1	Lane��Ϊ0	indicate the Lane index to be loaded or stored in vector load/store instructions
-	s_wauxi [AUX_LSVSTRD], 0	;address stride 0	indicate the address stride (of elements number) between each element in memory for vector load/store instructions.
-	s_wauxi [AUX_LSVCIDX], 0	;start column 0	indicate the column index for starting element in Lane SRAM array
-	s_wauxi [AUX_LSVLEN], 64	;һ��load 64	indicate the number of elements to be loaded or stored in vector load/store instructions.
-	v_ld_b VS1, SR0, $output_fc4_addr
-
-	s_wauxi [AUX_LSVHV], 0		;Load kernel��VR1	horizontally	indicate the data will be transferred horizontally or vertically from/into Lane SRAM array
-	s_wauxi [AUX_LSVRIDX], 0		;start row 0	indicate the row index for starting element in Lane SRAM array.
-	s_wauxi [AUX_LSVROW], 10		;10 rows	indicates the number of rows to be transferred from memory in horizontal transferred mod
-	s_wauxi [AUX_LSVROWSTRD], 0	;row stride 0	 indicates The stride between each row or each column in memory space
-
-	;===========kernelֻ��һ�ݣ���Ҫ�ظ���ȡ=========
-	;s_wauxi [AUX_ACTTASK],0b0001
-	v_ld_b VR1, SR0, $kernel_fc5_addr
-	;s_wauxi [AUX_ACTTASK],0b0010
-	v_ld_b VR1, SR0, $kernel_fc5_addr
-	;s_wauxi [AUX_ACTTASK],0b0100
-	v_ld_b VR1, SR0, $kernel_fc5_addr
-	;s_wauxi [AUX_ACTTASK],0b1000
-	v_ld_b VR1, SR0, $kernel_fc5_addr
-	;print_f vR1, aux_lsvln=0, aux_lsvridx=0, aux_lsvcidx=0, aux_lsvlen=64, aux_lsvrow =10, output=checkcheck.txt
-
-	;s_wauxi [AUX_ACTTASK],0b1111
-	s_wauxi [AUX_VLEN0], 1		;1��
-	s_wauxi [AUX_MVVROW], 10	;32��
+	s_wauxi [AUX_ACTTASK],0b1111	;����Ŀ�����ݵ���������Լ����������Ϊ4��byte	indicates The stride between each element in VR/VS
+	s_wauxi [AUX_VLEN0], 2	;2��
+	s_wauxi [AUX_MVVROW], 12		;12��
 	s_wauxi [AUX_MVVDRIDX], 0	;��0�п�ʼ
-	v_movi_b PR, 0			;VR1��VS1����ۼ�		PRԤ��Ϊ0�����ڽ������ĵ���ۼ�ʹ��
+	s_wauxi [AUX_MVVDCIDX], 0	;��0�п�ʼ
+	v_movi_b VR1,0				;padding1 ��	�����Ҳ�12*2�ľ���padding
 
-	s_wauxi [AUX_ACTPE], 0b00000000_00000000_00000011_11111111		;ʹ��ǰ10��PE	indicate the corresponding PE (of each active Lane) will be activated or not in the following instructions
-	s_wauxi [AUX_VLEN0], 64		;��������Ϊ64	indicate number of elements for 1st vector operand to be executed in vector instructions
+	s_wauxi [AUX_VLEN0], 8		;8��
+	s_wauxi [AUX_MVVROW], 2		;2��
+	s_wauxi [AUX_MVVDRIDX], 0	;��0�п�ʼ
+	s_wauxi [AUX_MVVDCIDX], 2	;��2�п�ʼ
+	v_movi_b VR1,0				;padding2 ��	�����ϲ�2*8�ľ���padding
 
-	v_mulacc_b PR, VR1, VS1	;		�ĵ���ָ���޲�����		��������ۼӣ��ۼ�PR����д�뵽PR
-	;print_b pr, ln=0, len=10, intfxdp=4, acttask=0b1111, output=checkcheck.txt,output_mat=D:/output_mat/pr.mat
+	s_wauxi [AUX_VLEN0], 2		;2��
+	s_wauxi [AUX_MVVROW], 12		;12��
+	s_wauxi [AUX_MVVDRIDX], 0	;��0�п�ʼ
+	s_wauxi [AUX_MVVDCIDX], 10	;��10�п�ʼ
+	v_movi_b VR1,0				;padding3 ��	�������10*2�ľ���padding
 
-	s_wauxi [AUX_LSVLEN], 10		;Load bias��VR2	һ�� load 10	indicate the number of elements to be loaded or stored in vector load/store instructions.
-	s_wauxi [AUX_LSVROW], 1		;1 rows	indicates the number of rows to be transferred from memory in horizontal transferred mod
-	s_wauxi [AUX_LSVROWSTRD], 0	;row stride 0	 indicates The stride between each row or each column in memory space
-	;=========biasֻ��һ�ݣ�Ҳ��Ҫ�ظ���ȡ========
-	;s_wauxi [AUX_ACTTASK],0b0001
-	v_ld_b VR2, SR0, $bias_fc5_addr
-	;s_wauxi [AUX_ACTTASK],0b0010
-	v_ld_b VR2, SR0, $bias_fc5_addr
-	;s_wauxi [AUX_ACTTASK],0b0100
-	v_ld_b VR2, SR0, $bias_fc5_addr
-	;s_wauxi [AUX_ACTTASK],0b1000
-	v_ld_b VR2, SR0, $bias_fc5_addr
+	s_wauxi [AUX_VLEN0], 8		;8��
+	s_wauxi [AUX_MVVROW], 2		;2��
+	s_wauxi [AUX_MVVDRIDX], 10	;��10�п�ʼ
+	s_wauxi [AUX_MVVDCIDX], 2	;��2�п�ʼ
+	v_movi_b VR1,0				;padding4 ��	�����²�2*8�ľ���padding
 
-	s_wauxi [AUX_ACTLN], 0		;ǰ��ĵ���ۼӽ����bias���	Lane��Ϊ0	indicate the corresponding Lane will be activated or not in the following instructions
-	s_wauxi [AUX_ACTPE], 0b00000000_00000000_00000000_00000001		;ʹ�õ�1��PE	indicate the corresponding PE (of each active Lane) will be activated or not in the following instructions
-	s_wauxi [AUX_VLEN0], 10		;��������Ϊ10	indicate number of elements for 1st vector operand to be executed in vector instructions
+	s_wauxi [AUX_VLEN0], 2		;2��
+	s_wauxi [AUX_MVVROW], 12		;12��
+	s_wauxi [AUX_MVVDRIDX], 16	;��16�п�ʼ
+	s_wauxi [AUX_MVVDCIDX], 0	;��0�п�ʼ
+	v_movi_b VR1,0				;padding1 ��	�����Ҳ�12*2�ľ���padding
 
-	;s_wauxi [AUX_ACTTASK],0b1111
-	s_wauxi [AUX_MVVROW], 10		;��PR����VR3		The number of rows in source or destination operands.
-	s_wauxi [AUX_VLEN0],1		;ÿ��10��Ԫ��	The number of elements in source or destination operands
-	s_wauxi [AUX_MVVSRIDX], 0	;Դ����λ��0�п�ʼ	The row index for starting element of source operand in Lane SRAM array
+	s_wauxi [AUX_VLEN0], 8		;8��
+	s_wauxi [AUX_MVVROW], 2		;2��
+	s_wauxi [AUX_MVVDRIDX], 16	;��16�п�ʼ
+	s_wauxi [AUX_MVVDCIDX], 2	;��2�п�ʼ
+	v_movi_b VR1,0				;padding2 ��	�����ϲ�2*8�ľ���padding
+
+	s_wauxi [AUX_VLEN0], 2		;2��
+	s_wauxi [AUX_MVVROW], 12		;12��
+	s_wauxi [AUX_MVVDRIDX], 16	;��16�п�ʼ
+	s_wauxi [AUX_MVVDCIDX], 10	;��10�п�ʼ
+	v_movi_b VR1,0				;padding3 ��	�������10*2�ľ���padding
+
+	s_wauxi [AUX_VLEN0], 8		;8��
+	s_wauxi [AUX_MVVROW], 2		;2��
+	s_wauxi [AUX_MVVDRIDX], 26	;��26�п�ʼ
+	s_wauxi [AUX_MVVDCIDX], 2	;��2�п�ʼ
+	v_movi_b VR1,0				;padding4 ��	�����²�2*8�ľ���padding
+
+	s_wauxi [AUX_VLEN0], 1		;1��
+	s_wauxi [AUX_MVVROW], 9		;9��
+	s_wauxi [AUX_MVVDRIDX], 0	;��0�п�ʼ
+	s_wauxi [AUX_MVVDCIDX], 8	;��8�п�ʼ
+	v_movi_b VR8,0				;padding1 ��	�������9*1�ľ���padding
+
+	s_wauxi [AUX_VLEN0], 8		;8��
+	s_wauxi [AUX_MVVROW], 1		;1��
+	s_wauxi [AUX_MVVDRIDX], 8	;��8�п�ʼ
+	s_wauxi [AUX_MVVDCIDX], 0	;��1�п�ʼ
+	v_movi_b VR8,0				;padding2 ��	�����²�1*8�ľ���padding
+
+	s_addi  SR1, SR0, 0			;i����
+loop0:
+	s_addi  SR2, SR0, 0
+	s_addi  SR4, SR0, 0			;j����
+	s_wauxi [AUX_DWUP], 1		;entire lane holding two matrix	indicate if the 2D convolution instruction is operated on half-lane mode
+	s_wauxi [AUX_VLEN0], 8		;��������Ϊ8
+	s_wauxi [AUX_ACTPE], 0b00000000_11111111_00000000_11111111	;������������	ʹ��16��PE	Indicate which PE (of each active Lane) will be activated.
+	v_add_b  VR8, VR0, VR0
+	s_mulwi SR6, SR1, 800
+	s_add  SR3, SR0, SR6		;kernel�����offset=5*5*32*i(SR1)+5*5*j(SR3)
+
+
+	s_wauxi [AUX_LSVROW], 8		;8��	indicates the number of rows to be transferred from/to memory in vertical transferred mode
+loop1:
+	s_wauxi [AUX_ACTTASK],0b1111
+	s_wauxi [AUX_LSVRIDX], 2	;��ʼ�к� 2	indicate the row index for starting element in Lane SRAM array
+	s_wauxi [AUX_LSVCIDX], 2	;��ʼ�к� 2	indicate the column index for starting element in Lane SRAM array
+	s_wauxi [AUX_LSVLEN], 8		;һ��load 8��Ԫ��	indicate the number of elements to be loaded or stored in vector load/store instructions
+	v_ld_b  VR1, SR2, $outputs_pool_c2_addr 	;����load��VR1 �ϰ벿��	load����8*8���� input_conv
+	s_wauxi [AUX_LSVRIDX], 18	;��ʼ�к� 18	indicates the number of rows to be transferred from/to memory in vertical transferred mode
+	s_wauxi [AUX_LSVCIDX], 2	;��ʼ�к� 2	indicate the row index for starting element in Lane SRAM array
+	;==============4��ͼһ���ȡ=================
+	s_addi SR2, SR2, 256			;offset = 8*8*4fig = 64*4=256
+	v_ld_b  VR1, SR2, $outputs_pool_c2_addr 	;����load��VR1 �°벿��
+
+	s_wauxi [AUX_LSVCIDX], 0	;��ʼ�к�0	indicate the column index for starting element in Lane SRAM array
+	s_wauxi [AUX_LSVLEN], 25	;һ��load 25��Ԫ��	indicate the number of elements to be loaded or stored in vector load/store instructions
+	s_wauxi [AUX_ACTTASK],0b0001
+	v_ld_b  VS1, SR3, $kernel_c3_addr 	;����load��VS1
+	s_wauxi [AUX_ACTTASK],0b0010
+	v_ld_b  VS1, SR3, $kernel_c3_addr 	;����load��VS1
+	s_wauxi [AUX_ACTTASK],0b0100
+	v_ld_b  VS1, SR3, $kernel_c3_addr 	;����load��VS1
+	s_wauxi [AUX_ACTTASK],0b1000
+	v_ld_b  VS1, SR3, $kernel_c3_addr 	;����load��VS1
+
+	s_addi SR3, SR3, 25
+	s_wauxi [AUX_ACTTASK],0b0001
+	v_ld_b  VS3, SR3, $kernel_c3_addr 	;����load��VS3
+	s_wauxi [AUX_ACTTASK],0b0010
+	v_ld_b  VS3, SR3, $kernel_c3_addr 	;����load��VS3
+	s_wauxi [AUX_ACTTASK],0b0100
+	v_ld_b  VS3, SR3, $kernel_c3_addr 	;����load��VS3
+	s_wauxi [AUX_ACTTASK],0b1000
+	v_ld_b  VS3, SR3, $kernel_c3_addr 	;����load��VS3
+
+
+	s_wauxi [AUX_VLEN0], 12		;2D �����Ҫ���õ�	12*12=144��Ԫ��	The number of elements in vector operands.
+	s_wauxi [AUX_ACTPE], 0b00000000_11111111_00000000_11111111		;ʹ��16��PE	Indicate which PE (of each active Lane) will be activated.
+	s_wauxi [AUX_VLEN1], 5		;width is 5	indicate the sliding window length of 1D/2D sliding
+	s_wauxi [AUX_VLEN2], 5		;height is 5	indicate the sliding window height of 2D sliding
+	s_wauxi [AUX_SLDSTRD1], 1	;indicate the  horizontal stride of elements number for 2D sliding.
+	s_wauxi [AUX_SLDSTRD2], 1	;indicate the vertical stride of elements number for 2D sliding
+	v_cnv2d_b  VR2, VR1, VS1	;�ⲽ�������VR1���������룬ACTPEӦ���0x00ff00ff	2D �������	����������VR2
+	;==============4��ͼһ���ȡ=================
+	s_addi SR2, SR2, 256		;offset = 8*8*4fig = 64*4=256
+	s_addi SR3, SR3, 25
+	s_addi SR4, SR4, 2			;j=j+2
+
+	s_wauxi [AUX_ACTTASK],0b1111
+	s_wauxi [AUX_MVVROW], 8		;��VR2���°벿������VR7���ں����ľ�������ۼӲ���	8��	The number of rows in source or destination operands.
+	s_wauxi [AUX_VLEN0], 8		;ÿ��8��Ԫ��	The number of elements in source or destination operands
+	s_wauxi [AUX_MVVSRIDX], 16	;Դ����λ��16�п�ʼ	The row index for starting element of source operand in Lane SRAM array
 	s_wauxi [AUX_MVVSCIDX], 0	;Դ����λ��0�п�ʼ	The column index for starting element of source operand in Lane SRAM array
 	s_wauxi [AUX_MVVDRIDX], 0	;Ŀ������λ��0�п�ʼ	The row index for starting element of the destination operand in Lane SRAM arra
 	s_wauxi [AUX_MVVDCIDX], 0 	;Ŀ������λ��0�п�ʼ	The column index for starting element of the destination operand in Lane SRAM array
-	;v_movt_b VR3, PR	        ;��1��move��1����
+	v_mov_b VR7, VR2
+	;print_f vR7, aux_lsvln=0, aux_lsvridx=0, aux_lsvcidx=0, aux_lsvlen=8, aux_lsvrow =8, output=checkcheck.txt
+	s_wauxi [AUX_VLEN0], 8		;��������Ϊ8
+	s_wauxi [AUX_ACTPE], 0b00000000_00000000_00000000_11111111	;������������	ʹ��8��PE	Indicate which PE (of each active Lane) will be activated.
+	v_add_b  VR2, VR2, VR7
+	v_add_b  VR8, VR2, VR8		;�ۼӾ�����
+	;s_bne SR4, 32 , loop1
+	;print_b VR3, ln=0, ridx=0, cidx=0, len=8, row=8, intfxdp=4, acttask=0b0001, output=checkcheck.txt,output_mat=D:/output_mat/vcadd.mat
 
-	s_wauxi [AUX_VLEN0], 10		;��������Ϊ10	indicate number of elements for 1st vector operand to be executed in vector instructions
-	v_add_b VR2, VR2, VR3		;�ĵ���ԭ������û��PR
+	s_ld_b SR5, SR1, $bias_c3_addr		;load bias_fixed(i)	bias��ַΪ i+bias_c1_addr
 
-	;==============4��ͼһ���=================
-	s_wauxi [AUX_LSVLEN], 40		;һ��store 10*4fig=40	indicate the number of elements to be loaded or stored in vector load/store instructions.
-	v_st_b VR2, SR0, $output_fc5_addr 	;store outputs��DDR
-	;print_b VR2, ln=0, ridx=0, cidx=0, len=10, row=1, intfxdp=4, acttask=0b1111, output=checkcheck.txt,output_mat=D:/output_mat/fc5sim.mat
+	v_add_b  VR8, VR8, SR5		;outputs_conv(:, :, i) =sum(tmp_map, 3) + bias_fixed(i);
+	;print_b VR3, ln=0, ridx=0, cidx=0, len=8, row=8, intfxdp=4, acttask=0b0001, output=checkcheck.txt,output_mat=D:/output_mat/vbias.mat
 
-	;export_mem ./lenet_fixed8/fc5_mem_data_out.txt
-	;print_b mem, base=$output_fc5_addr, bias=0, len=10, row=1,intfxdp=4, output=checkcheck.txt,output_mat=D:/output_mat/fc5.mat;
+	v_relu_b  VR8, VR8, SR0		;RELU����
+
+	;print_b VR3, ln=0, ridx=0, cidx=0, len=8, row=8, intfxdp=4, acttask=0b0001, output=checkcheck.txt,output_mat=D:/output_mat/vrelu.mat
+
+	s_wauxi [AUX_VLEN0], 9		;16��
+	s_wauxi [AUX_MVVDCIDX], 0	;��0�п�ʼ
+	v_movi_b VS1,1				;onematrix	 ͨ��movָ�ȫ1����load��VS1
+
+	s_wauxi [AUX_DWUP], 0		;entire lane holding one matrix	indicate if the 2D convolution instruction is operated on half-lane mode
+	s_wauxi [AUX_VLEN0], 9		;2D pooling��Ҫ���õ�	9*9=81��Ԫ��	The number of elements in vector operands.
+	s_wauxi [AUX_ACTPE], 0b00000000_00000000_00000000_01010101	;������������	ʹ��4��PE	Indicate which PE (of each active Lane) will be activated.
+	s_wauxi [AUX_VLEN1], 3		;width is 3	indicate the sliding window length of 1D/2D sliding
+	s_wauxi [AUX_VLEN2], 3		;height is 3	indicate the sliding window height of 2D sliding
+	s_wauxi [AUX_SLDSTRD1], 2	;indicate the  horizontal stride of elements number for 2D sliding.
+	s_wauxi [AUX_SLDSTRD2], 2	;indicate the vertical stride of elements number for 2D sliding
+	v_cnv2d_b  VR5, VR8, VS1	;2D���	���д��VR5
+
+	s_wauxi [AUX_VLEN0], 4		;��������Ϊ4
+	s_wauxi [AUX_ACTPE], 0b00000000_00000000_00000000_00001111
+	;v_divi_b  VR5, VR5, 9		;���ֵ	���д��VR5
+	v_dotmuli_b  VR5, VR5, 0.125, intfxdp=4 ;û�г������������ó˷�����
+
+	;print_b VR5, ln=0, ridx=0, cidx=0, len=4, row=4, intfxdp=4, acttask=0b1111, output=checkcheck.txt,output_mat=D:/output_mat/meanpooling.mat
+
+	s_wauxi [AUX_LSVRIDX], 0	;����store��DDR	��ʼ�к� 0	indicate the row index for starting element in Lane SRAM array
+	s_wauxi [AUX_LSVCIDX], 0	;��ʼ�к� 0	indicate the column index for starting element in Lane SRAM array
+	s_wauxi [AUX_LSVROW], 4		;4��	indicates the number of rows to be transferred from/to memory in vertical transferred mode
+	s_wauxi [AUX_LSVLEN], 4 	;һ��store 4��Ԫ��	indicate the number of elements to be loaded or stored in vector load/store instructions
+	;=========4��ͼһ���=============
+	s_mulwi  SR5, SR1, 64		;����offset =4 *4 *4 fig =16*4 = 64 4��ͼһ���
+	v_st_b  VR5, SR5, $outputs_pool_c3_addr
+
+	s_addi  SR1, SR1, 1
+	;s_bne  SR1, 64, loop0
+	;export_mem ./lenet_fixed8/conv3_mem_data_out.txt
+	;print_b mem, base=$outputs_pool_c3_addr, bias=0, len=16, row=4, intfxdp=4, output=checkcheck.txt,output_mat=D:/output_mat/pooling1.mat	;row1
+	;print_b mem, base=$outputs_pool_c3_addr, bias=16, len=4, row=4,intfxdp=4, output=checkcheck.txt,output_mat=D:/output_mat/pooling2.mat	;row2
+	;print_b mem, base=$outputs_pool_c3_addr, bias=32, len=4, row=4, intfxdp=4, output=checkcheck.txt,output_mat=D:/output_mat/pooling3.mat;row3
+	;print_b mem, base=$outputs_pool_c3_addr, bias=48, len=4, row=4,intfxdp=4, output=checkcheck.txt,output_mat=D:/output_mat/pooling4.mat	;row4
+	;print_b mem, base=$outputs_pool_c3_addr, bias=64, len=4, row=4, intfxdp=4, output=checkcheck.txt,output_mat=D:/output_mat/pooling5.mat;row5
+	;print_b mem, base=$outputs_pool_c3_addr, bias=160, len=4, row=4, intfxdp=4, output=checkcheck.txt,output_mat=D:/output_mat/pooling11.mat;row11
+	;print_b mem, base=$outputs_pool_c3_addr, bias=320, len=4, row=4, intfxdp=4, output=checkcheck.txt,output_mat=D:/output_mat/pooling21.mat;row21
+	;print_b mem, base=$outputs_pool_c3_addr, bias=480, len=4, row=4,intfxdp=4, output=checkcheck.txt,output_mat=D:/output_mat/pooling31.mat;row31
+	;print_b mem, base=$outputs_pool_c3_addr, bias=496, len=4, row=4,intfxdp=4, output=checkcheck.txt,output_mat=D:/output_mat/pooling32.mat;row32
+	;print_b mem, base=$outputs_pool_c3_addr, bias=800, len=4, row=4,intfxdp=4, output=checkcheck.txt,output_mat=D:/output_mat/pooling51.mat;row51
+	;print_b mem, base=$outputs_pool_c3_addr, bias=1008, len=4, row=4,intfxdp=4, output=checkcheck.txt,output_mat=D:/output_mat/pooling64.mat;row64
+
+
+
