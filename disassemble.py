@@ -6,6 +6,7 @@ from util.exception import DasmException
 
 code_list = []
 
+
 def get_operand_imm_bits(input_str):
     return input_str[2:34]
 
@@ -88,8 +89,6 @@ def disassemble(input_str):
 
 
 def main():
-    input_file = "test\\dtest.txt"
-    verbose = True
     if input_file:
         with open(input_file, 'r') as in_f:
             for file_line in in_f.readlines():
@@ -101,6 +100,10 @@ def main():
         for code in code_list:
             print(code)
 
+    if output_file:
+        with open(input_file, 'w') as out_f:
+            for code in code_list:
+                out_f.write('{0}\n'.format(code))
 
 
 if __name__ == '__main__':
