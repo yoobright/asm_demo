@@ -79,7 +79,11 @@ def disassemble(input_str):
     if not opcode:
         raise DasmException('can not disassemble opcode')
     op_list = filter(lambda x: x != '', [opcode, operand_reg, operand_imm])
-    ret = ' '.join(op_list)
+    if len(op_list) == 1:
+        ret = op_list[0]
+    else:
+        list_tmp = ' '.join(op_list).split()
+        ret = list_tmp[0] + ' ' + ', '.join(list_tmp[1:])
     return ret
 
 
