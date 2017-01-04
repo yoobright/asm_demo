@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 import re
 import sys
+import six
 import numpy as np
 from exception import AsmException
 from deModel import DeFixedInt
 
 
 def is_string(s):
-    # if we use Python 3
-    if sys.version_info[0] >= 3:
-        return isinstance(s, str)
-    # we use Python 2
-    return isinstance(s, basestring)
+    return isinstance(s, six.string_types)
 
 
 def check_hex(check_input):
