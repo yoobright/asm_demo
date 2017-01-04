@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-from util.encode import *
-from util.encode_dict import *
+from encode import *
+from encode_dict import *
+from util import get_from_module
 
 OPERAND_ENCODE_WIDTH = 50
 
@@ -127,50 +128,9 @@ class Factory(object):
     @staticmethod
     def get_parser(opcode):
         op_type = opcode_encode_dict[opcode]['type']
-        if op_type == '000_0':
-            return Parser_000_0
-        elif op_type == '000_1':
-            return Parser_000_1
-        elif op_type == '000_2':
-            return Parser_000_2
-        elif op_type == '000_3':
-            return Parser_000_3
-        elif op_type == '000_4':
-            return Parser_000_4
-        elif op_type == '001_0':
-            return Parser_001_0
-        elif op_type == '001_1':
-            return Parser_001_1
-        elif op_type == '010_0':
-            return Parser_010_0
-        elif op_type == '011_0':
-            return Parser_011_0
-        elif op_type == '100_0':
-            return Parser_100_0
-        elif op_type == '100_1':
-            return Parser_100_1
-        elif op_type == '100_2':
-            return Parser_100_2
-        elif op_type == '101_0':
-            return Parser_101_0
-        elif op_type == '101_1':
-            return Parser_101_1
-        elif op_type == '101_2':
-            return Parser_101_2
-        elif op_type == '101_3':
-            return Parser_101_3
-        elif op_type == '101_4':
-            return Parser_101_4
-        elif op_type == '110_0':
-            return Parser_110_0
-        elif op_type == '110_1':
-            return Parser_110_1
-        elif op_type == '110_2':
-            return Parser_110_2
-        elif op_type == '111_0':
-            return Parser_111_0
-        elif op_type == '111_1':
-            return Parser_111_1
+        parser_name = 'Parser_' + op_type
+        parser = get_from_module(parser_name, globals(), 'parser')
+        return parser
 
 
 class BaseParser(object):
