@@ -96,6 +96,7 @@ aux_reg_list = [
     'aux_sldstrd2',
     'aux_actln',
     'aux_actpe',
+    'aux_acttask',  # for task parallelism
     # Vector Load/Store Control
     'aux_lsvlen',
     'aux_lsvln',
@@ -105,7 +106,7 @@ aux_reg_list = [
     'aux_lsvstrd',
     'aux_lsvrow',
     'aux_lsvrowstrd',
-    'aux_lsvpad',
+    # 'aux_lsvpad',
     # Inter-Lane Transfer Control
     'aux_ilvlnsrc',
     'aux_ilvpesrc',
@@ -118,8 +119,9 @@ aux_reg_list = [
     'aux_intrnd',
     'aux_intsat',
     'aux_intfxdp',
-
-    'aux_acttask'
+    'aux_intsc1fx',
+    'aux_intsc2fx',
+    'aux_intdsfp'
 ]
 
 aux_reg_encode_dict = {}
@@ -390,7 +392,7 @@ for i in ['', 'i']:
 
 if __name__ == '__main__':
     import pprint
-    pp = pprint.PrettyPrinter(indent=2)
+    pp = pprint.PrettyPrinter()
     pp.pprint(reg_encode_dict)
     print('=' * 20)
     pp.pprint(aux_reg_encode_dict)

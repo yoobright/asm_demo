@@ -158,7 +158,7 @@ def load_by_line(file_name, offset=0):
 
 
 def main():
-    pp = pprint.PrettyPrinter(indent=2)
+    pp = pprint.PrettyPrinter()
 
     load_by_line(input_file, addr_offset)
 
