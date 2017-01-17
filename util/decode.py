@@ -72,5 +72,6 @@ def decode_1_reg(input_str):
 
 
 def decode_imm(input_str):
-    ret = hex(int(input_str, 2))
+    ret = hex(int(input_str, 2) + 0x100000000)
+    ret = ret[0:2] + ret[3:-1]
     return ret

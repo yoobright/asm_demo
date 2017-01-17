@@ -86,7 +86,7 @@ def parse_imm(input_str, data_dict=None):
 def parse_j_imm(input_str, pc, tag_dict):
     ret = None
     if input_str in tag_dict:
-        input_str = '{}'.format(pc - tag_dict[input_str])
+        input_str = '{}'.format(tag_dict[input_str] - pc)
         ret = parse_imm(input_str)
     return ret
 

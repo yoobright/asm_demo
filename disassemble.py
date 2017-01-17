@@ -51,11 +51,15 @@ def disassemble(input_str):
     opcode = decode_opcode(fun_imm_group_pair)
     operand_num = decode_operand_num(fun_imm_group_pair)
 
+    print(operand_imm_bits)
+
     if bool(imm_bits):
         if opcode == 's_rauxi':
             operand_imm = decode_aux_reg(operand_imm_bits[-6:])
         else:
             operand_imm = decode_imm(operand_imm_bits)
+
+        print(operand_imm_bits)
 
         if opcode == 's_wauxi':
             operand_reg = decode_aux_reg(operand_reg_bits[0:6])
@@ -64,6 +68,7 @@ def disassemble(input_str):
                 operand_reg = decode_2_reg(operand_reg_bits)
             elif operand_num == 2:
                 operand_reg = decode_1_reg(operand_reg_bits)
+
     else:
         if opcode == 's_waux':
             operand_reg = decode_aux_reg(operand_reg_bits[0:6]) + ' ' + \
