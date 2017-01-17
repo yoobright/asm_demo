@@ -4,6 +4,14 @@ from decode_dict import aux_reg_decode_dict
 from decode_dict import opcode_decode_dict
 
 
+def bin2signed_int(input_str):
+    ret = None
+    if input_str.startswith('0'):
+        return int(input_str, 2)
+    if input_str.startswith('1'):
+        return int(input_str, 2) - 2**32
+
+
 def decode_reg(input_str):
     ret = None
     if input_str in reg_decode_dict:
