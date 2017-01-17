@@ -12,7 +12,7 @@ def get_coe_file(dir_name):
             file_list.append(asm_file_name)
     return file_list
 
-cmd_temp = "python disassemble.py -i {0} -v"
+cmd_temp = "python disassemble.py -i {0} -v -o test\\dout.txt"
 file_name = "test\\dtest.txt"
 cmd_str = cmd_temp.format(file_name)
 subprocess.call(cmd_str, shell=True)

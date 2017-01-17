@@ -119,9 +119,10 @@ aux_reg_list = [
     'aux_intrnd',
     'aux_intsat',
     'aux_intfxdp',
-    'aux_intsc1fx',
-    'aux_intsc2fx',
-    'aux_intdsfp'
+    'aux_intfxsc1',
+    'aux_intfxsc2',
+    'aux_intfxalu',
+    'aux_intfxds'
 ]
 
 aux_reg_encode_dict = {}

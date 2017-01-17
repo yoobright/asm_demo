@@ -101,7 +101,7 @@ def main():
             print(code)
 
     if output_file:
-        with open(input_file, 'w') as out_f:
+        with open(output_file, 'w') as out_f:
             for code in code_list:
                 out_f.write('{0}\n'.format(code))
 

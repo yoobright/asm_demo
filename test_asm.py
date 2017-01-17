@@ -11,7 +11,7 @@ def get_asm_file(dir_name):
             file_list.append(asm_file_name)
     return file_list
 
-cmd_temp = "python assemble.py -i {0} -v"
+cmd_temp = "python assemble.py -i {0} -v -o test\\dtest.txt"
 file_name = "test\\test.txt"
 cmd_str = cmd_temp.format(file_name)
 subprocess.call(cmd_str, shell=True)
