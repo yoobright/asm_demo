@@ -51,15 +51,14 @@ def disassemble(input_str):
     opcode = decode_opcode(fun_imm_group_pair)
     operand_num = decode_operand_num(fun_imm_group_pair)
 
-    print(operand_imm_bits)
-
-    if bool(imm_bits):
+    if imm_bits == '1':
         if opcode == 's_rauxi':
             operand_imm = decode_aux_reg(operand_imm_bits[-6:])
         else:
             operand_imm = decode_imm(operand_imm_bits)
 
-        print(operand_imm_bits)
+        if opcode in ['s_bne', 's_beq', 's_blt', 's_bltu', 's_bge', 's_bgeu']:
+            operand_imm = '{}'.format(bin2signed_int(operand_imm_bits))
 
         if opcode == 's_wauxi':
             operand_reg = decode_aux_reg(operand_reg_bits[0:6])
@@ -68,7 +67,6 @@ def disassemble(input_str):
                 operand_reg = decode_2_reg(operand_reg_bits)
             elif operand_num == 2:
                 operand_reg = decode_1_reg(operand_reg_bits)
-
     else:
         if opcode == 's_waux':
             operand_reg = decode_aux_reg(operand_reg_bits[0:6]) + ' ' + \
@@ -76,11 +74,11 @@ def disassemble(input_str):
         else:
             if operand_num == 3:
                 operand_reg = decode_3_reg(operand_reg_bits)
-            elif operand_reg == 2:
+            elif operand_num == 2:
                 operand_reg = decode_2_reg(operand_reg_bits)
-            elif operand_reg == 1:
+            elif operand_num == 1:
                 operand_reg = decode_1_reg(operand_reg_bits)
-            elif operand_reg == 0:
+            elif operand_num == 0:
                 pass
     if not opcode:
         raise DasmException('can not disassemble opcode')
@@ -125,4 +123,6 @@ if __name__ == '__main__':
     output_file = args.output
     verbose = args.verbose
 
+    # input_file = "test\\dtest.txt"
+    # verbose = True
     main()

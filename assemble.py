@@ -206,5 +206,8 @@ if __name__ == '__main__':
     output_file = args.output
     verbose = args.verbose
 
+    input_file = "test\\test.txt"
+    verbose = True
+
     main()
 

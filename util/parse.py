@@ -118,10 +118,12 @@ def parse_reg(input_str, reg_type_list):
 
 
 def parse_reg_imm(imm, data_dict, input_str, reg_type_list):
+    ret = None
     if imm:
-        return parse_imm(input_str, data_dict)
+        ret = parse_imm(input_str, data_dict)
     else:
-        return parse_reg(input_str, reg_type_list)
+        ret = parse_reg(input_str, reg_type_list)
+    return ret
 
 
 class Factory(object):
@@ -149,7 +151,7 @@ class BaseParser(object):
     def parse_opcode(self):
         if self.code_line.opcode in opcode_encode_dict:
             meta = opcode_encode_dict[self.code_line.opcode]
-            return meta['function'] + meta['imm'] + meta['group']
+            return meta['function'] + str(int(self.imm)) + meta['group']
         else:
             print("'{}' is not a valid opcode".format(self.code_line.opcode))
             raise AsmException('opcode parse error')
