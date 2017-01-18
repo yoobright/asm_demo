@@ -2,6 +2,7 @@
 from decode_dict import reg_decode_dict
 from decode_dict import aux_reg_decode_dict
 from decode_dict import opcode_decode_dict
+import numpy as np
 
 
 def bin2signed_int(input_str):
@@ -10,6 +11,11 @@ def bin2signed_int(input_str):
         return int(input_str, 2)
     if input_str.startswith('1'):
         return int(input_str, 2) - 2**32
+
+
+def bin2single(input_str):
+    ret = np.uint32(int(input_str, 2)).view(np.float32)
+    return ret
 
 
 def decode_reg(input_str):

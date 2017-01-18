@@ -3,6 +3,7 @@ import argparse
 import re
 from util.decode import *
 from util.exception import DasmException
+from util.util import get_dtype_from_opcode
 
 code_list = []
 
@@ -61,6 +62,9 @@ def disassemble(input_str):
             operand_imm = decode_aux_reg(operand_imm_bits[-6:])
         elif opcode_type == 'jump':
             operand_imm = '{}'.format(bin2signed_int(operand_imm_bits))
+        elif opcode_type == 'v_calc':
+            if get_dtype_from_opcode(opcode) == 'f':
+                operand_imm = '{:.8f}'.format(bin2single(operand_imm_bits))
         else:
             operand_imm = decode_imm(operand_imm_bits)
 

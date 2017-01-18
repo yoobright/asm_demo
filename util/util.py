@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import six
 
+dtype_list = ['f', 'hb', 'b', 'h', 'w']
 
 def get_from_module(identifier, module_params, module_name,
                     instantiate=False, kwargs=None):
@@ -24,3 +25,11 @@ def get_from_module(identifier, module_params, module_name,
             raise Exception('Invalid ' + str(module_name) + ': ' +
                             str(identifier))
     return identifier
+
+
+def get_dtype_from_opcode(opcode):
+    ret = None
+    split = opcode.split('_')
+    if split[-1] in dtype_list:
+        ret = split[-1]
+    return ret

@@ -8,6 +8,7 @@ import re
 from util.encode_dict import opcode_encode_dict
 from util.exception import *
 from util.parse import Factory
+from util.util import get_dtype_from_opcode
 
 data_line_list = []
 code_line_list = []
@@ -18,7 +19,6 @@ data_offset_dict = {}
 
 addr_offset = 0
 type_list = ['word', 'half', 'byte']
-dtype_list = ['f', 'hb', 'b', 'h', 'w']
 
 
 def get_data_elem(line):
@@ -58,14 +58,6 @@ def get_code_elem(line):
         print("'{0}' is not a valid opcode".format(opcode))
         raise AsmException('opcode check error')
     return opcode, operand
-
-
-def get_dtype_from_opcode(opcode):
-    ret = None
-    split = opcode.split('_')
-    if split[-1] in dtype_list:
-        ret = split[-1]
-    return ret
 
 
 class DataLine:
@@ -206,8 +198,8 @@ if __name__ == '__main__':
     output_file = args.output
     verbose = args.verbose
 
-    input_file = "test\\test.txt"
-    verbose = True
+    # input_file = "test\\test.txt"
+    # verbose = True
 
     main()
 

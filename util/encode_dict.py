@@ -229,11 +229,11 @@ opcode_encode_dict['nop'] = \
 group = '001'
 operand_num = 2
 opcode_encode_dict['s_waux'] = \
-    set_meta(set_func_opcode(0), '0', group, '0', operand_num)
+    set_meta(set_func_opcode(0), '0', group, '0', operand_num, 'aux_op')
 opcode_encode_dict['s_wauxi'] = \
-    set_meta(set_func_opcode(0), '1', group, '0', operand_num)
+    set_meta(set_func_opcode(0), '1', group, '0', operand_num, 'aux_op')
 opcode_encode_dict['s_rauxi'] = \
-    set_meta(set_func_opcode(1), '1', group, '1', operand_num)
+    set_meta(set_func_opcode(1), '1', group, '1', operand_num, 'aux_op')
 
 
 # group 010
@@ -277,31 +277,31 @@ for i in ['', 'i']:
     for j in ['_f', '_hb', '_b', '_h', '_w']:
         opcode_encode_dict['v_add' + i + j] = \
             set_meta(set_func_opcode(0, j), set_imm_opcode(i), group, '0',
-                     operand_num)
+                     operand_num, 'v_calc')
         opcode_encode_dict['v_sub' + i + j] = \
             set_meta(set_func_opcode(1, j), set_imm_opcode(i), group, '0',
-                     operand_num)
+                     operand_num, 'v_calc')
         opcode_encode_dict['v_cmpeq' + i + j] = \
             set_meta(set_func_opcode(2, j), set_imm_opcode(i), group, '0',
-                     operand_num)
+                     operand_num, 'v_calc')
         opcode_encode_dict['v_cmpne' + i + j] = \
             set_meta(set_func_opcode(3, j), set_imm_opcode(i), group, '0',
-                     operand_num)
+                     operand_num, 'v_calc')
         opcode_encode_dict['v_cmplt' + i + j] = \
             set_meta(set_func_opcode(4, j), set_imm_opcode(i), group, '0',
-                     operand_num)
+                     operand_num, 'v_calc')
         opcode_encode_dict['v_cmpltu' + i + j] = \
             set_meta(set_func_opcode(5, j), set_imm_opcode(i), group, '0',
-                     operand_num)
+                     operand_num, 'v_calc')
         opcode_encode_dict['v_cmpgt' + i + j] = \
             set_meta(set_func_opcode(6, j), set_imm_opcode(i), group, '0',
-                     operand_num)
+                     operand_num, 'v_calc')
         opcode_encode_dict['v_cmpgtu' + i + j] = \
             set_meta(set_func_opcode(7, j), set_imm_opcode(i), group, '0',
-                     operand_num)
+                     operand_num, 'v_calc')
         opcode_encode_dict['v_dotmul' + i + j] = \
             set_meta(set_func_opcode(8, j), set_imm_opcode(i), group, '0',
-                     operand_num)
+                     operand_num, 'v_calc')
 
 operand_num = 2
 for i in ['_f', '_hb', '_b', '_h', '_w']:
