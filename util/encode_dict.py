@@ -31,13 +31,14 @@ def set_func_opcode(num, bw=None):
         return int2bin(num, 8)
 
 
-def set_meta(function, imm, group, type, operand_num):
+def set_meta(function, imm, group, type, operand_num, opcode_type=None):
     return {
         'function': function,
         'imm': imm,
         'group': group,
         'type': group + '_' + type,
-        'operand_num': operand_num
+        'operand_num': operand_num,
+        'opcode_type': opcode_type
     }
 
 # reg
@@ -141,33 +142,33 @@ opcode_encode_dict['s_jal'] = \
 opcode_encode_dict['s_jalr'] = \
     set_meta(set_func_opcode(1), '1', group, '0', operand_num)
 opcode_encode_dict['s_beq'] = \
-    set_meta(set_func_opcode(2), '1', group, '1', operand_num)
+    set_meta(set_func_opcode(2), '1', group, '1', operand_num, 'jump')
 opcode_encode_dict['s_bne'] = \
-    set_meta(set_func_opcode(3), '1', group, '1', operand_num)
+    set_meta(set_func_opcode(3), '1', group, '1', operand_num, 'jump')
 opcode_encode_dict['s_blt'] = \
-    set_meta(set_func_opcode(4), '1', group, '1', operand_num)
+    set_meta(set_func_opcode(4), '1', group, '1', operand_num, 'jump')
 opcode_encode_dict['s_bltu'] = \
-    set_meta(set_func_opcode(5), '1', group, '1', operand_num)
+    set_meta(set_func_opcode(5), '1', group, '1', operand_num, 'jump')
 opcode_encode_dict['s_bge'] = \
-    set_meta(set_func_opcode(6), '1', group, '1', operand_num)
+    set_meta(set_func_opcode(6), '1', group, '1', operand_num, 'jump')
 opcode_encode_dict['s_bgeu'] = \
-    set_meta(set_func_opcode(6), '1', group, '1', operand_num)
+    set_meta(set_func_opcode(6), '1', group, '1', operand_num, 'jump')
 operand_num = 0
 opcode_encode_dict['s_sync'] = \
     set_meta(set_func_opcode(8), '0', group, '2', operand_num)
 operand_num = 3
 opcode_encode_dict['s_ld_b'] = \
-    set_meta(set_func_opcode(9), '0', group, '3', operand_num)
+    set_meta(set_func_opcode(9), '0', group, '3', operand_num, 'ld_st')
 opcode_encode_dict['s_ld_h'] = \
-    set_meta(set_func_opcode(10), '0', group, '3', operand_num)
+    set_meta(set_func_opcode(10), '0', group, '3', operand_num, 'ld_st')
 opcode_encode_dict['s_ld_w'] = \
-    set_meta(set_func_opcode(11), '0', group, '3', operand_num)
+    set_meta(set_func_opcode(11), '0', group, '3', operand_num, 'ld_st')
 opcode_encode_dict['s_st_b'] = \
-    set_meta(set_func_opcode(12), '0', group, '3', operand_num)
+    set_meta(set_func_opcode(12), '0', group, '3', operand_num, 'ld_st')
 opcode_encode_dict['s_st_h'] = \
-    set_meta(set_func_opcode(13), '0', group, '3', operand_num)
+    set_meta(set_func_opcode(13), '0', group, '3', operand_num, 'ld_st')
 opcode_encode_dict['s_st_w'] = \
-    set_meta(set_func_opcode(14), '0', group, '3', operand_num)
+    set_meta(set_func_opcode(14), '0', group, '3', operand_num, 'ld_st')
 operand_num = 2
 opcode_encode_dict['s_movi'] = \
     set_meta(set_func_opcode(15), '1', group, '4', operand_num)
@@ -240,9 +241,9 @@ group = '010'
 operand_num = 3
 for i in ['_b', '_h', '_w']:
     opcode_encode_dict['v_ld' + i] = \
-        set_meta(set_func_opcode(0, i), '0', group, '0', operand_num)
+        set_meta(set_func_opcode(0, i), '0', group, '0', operand_num, 'ld_st')
     opcode_encode_dict['v_st' + i] = \
-        set_meta(set_func_opcode(1, i), '0', group, '0', operand_num)
+        set_meta(set_func_opcode(1, i), '0', group, '0', operand_num, 'ld_st')
 
 # group 011
 group = '011'

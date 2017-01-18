@@ -33,6 +33,13 @@ def decode_opcode(input_str):
     return ret
 
 
+def decode_opcode_type(input_str):
+    ret = None
+    if input_str in opcode_decode_dict:
+        ret = opcode_decode_dict[input_str]['opcode_type']
+    return ret
+
+
 def decode_operand_num(input_str):
     ret = None
     if input_str in opcode_decode_dict:

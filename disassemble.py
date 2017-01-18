@@ -49,16 +49,20 @@ def disassemble(input_str):
 
     fun_imm_group_pair = function_bits + '_' + imm_bits + '_' + group_bits
     opcode = decode_opcode(fun_imm_group_pair)
+    opcode_type = decode_opcode_type(fun_imm_group_pair)
     operand_num = decode_operand_num(fun_imm_group_pair)
+
+    if not opcode:
+        print(fun_imm_group_pair)
+        raise DasmException('can not disassemble opcode')
 
     if imm_bits == '1':
         if opcode == 's_rauxi':
             operand_imm = decode_aux_reg(operand_imm_bits[-6:])
+        elif opcode_type == 'jump':
+            operand_imm = '{}'.format(bin2signed_int(operand_imm_bits))
         else:
             operand_imm = decode_imm(operand_imm_bits)
-
-        if opcode in ['s_bne', 's_beq', 's_blt', 's_bltu', 's_bge', 's_bgeu']:
-            operand_imm = '{}'.format(bin2signed_int(operand_imm_bits))
 
         if opcode == 's_wauxi':
             operand_reg = decode_aux_reg(operand_reg_bits[0:6])
@@ -80,8 +84,7 @@ def disassemble(input_str):
                 operand_reg = decode_1_reg(operand_reg_bits)
             elif operand_num == 0:
                 pass
-    if not opcode:
-        raise DasmException('can not disassemble opcode')
+
     op_list = filter(lambda x: x != '', [opcode, operand_reg, operand_imm])
     if len(op_list) == 1:
         ret = op_list[0]

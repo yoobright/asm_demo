@@ -20,11 +20,20 @@ for key, value in opcode_encode_dict.items():
         opcode_encode_dict[key]['group']
     opcode_decode_dict[fun_imm_group_pair] = {
         'opcode': key,
-        'operand_num': opcode_encode_dict[key]['operand_num']
+        'operand_num': opcode_encode_dict[key]['operand_num'],
+        'opcode_type': opcode_encode_dict[key]['opcode_type']
     }
 
+    if opcode_encode_dict[key]['opcode_type'] == 'ld_st':
+        ld_st_imm_pair = fun_imm_group_pair[:-5] + '1' + fun_imm_group_pair[-4:]
+        opcode_decode_dict[ld_st_imm_pair] = {
+            'opcode': key,
+            'operand_num': opcode_encode_dict[key]['operand_num'],
+            'opcode_type': opcode_encode_dict[key]['opcode_type']
+        }
 
 if __name__ == '__main__':
+    from pprint import pprint as print
     print(reg_decode_dict)
     print(aux_reg_decode_dict)
     print(opcode_decode_dict)
